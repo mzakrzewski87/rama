@@ -162,7 +162,7 @@ var dropout = {
         cs_offset_x: 20, //in
         cs_offset_y: 0, //in
         span: 120, //in
-        thickness: 4, //in
+        thickness: 5, //in
         length: 25, //in
         xc: 0, // out
         yc: 0 //out
