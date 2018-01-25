@@ -33,131 +33,243 @@
 
 /* globalne */
 
+/******************************************************************************/
 /* podsiodłowa */
 var st = {
-        angle: 75, //in
-        diameter: 28,
-        length: 550, //560, //in
-        extra: 30,
-        xc: 0, //out
-        yc: 0  //out      
-    };
 
+    angle: 74.5, //in
+    diameter: 28,
+    length: 550, //560, //in
+    extra: 30,
+    xct: 0, //out, x of the c-c with the top tube
+    yct: 0, //out, y of the c-c with the top tube,
+    xcb: 0, //out, same as x of bb center
+    ycb: 0, //out, same as y of bb center
+    color: "#0000aa", //in
+    
+    draw: function() {
+        draw_pipe(this.xcb, this.ycb, this.length, this.angle, this.diameter, this.color);
+        draw_pipe(this.xct, this.yct, this.extra, this.angle, this.diameter, this.color);
+    }
+};
+
+/******************************************************************************/
 /* główka */
 var ht = {
-        angle: 74, //in
-        diameter: 38,
-        length: 35,// in c-c
-        extra_top: 40, // in t-c
-        extra_bottom: 40, // in b-c
-        xcu: 0,
-        ycu: 0,
-        xcuu: 0,
-        ycuu: 0,
-        xcl: 0,
-        ycl: 0,
-        xcll: 0,
-        ycll: 0
-    };
 
+    angle: 74.5, //in
+    diameter: 38,
+    length: 50,// in c-c
+    extra_top: 40, // in t-c
+    extra_bottom: 40, // in b-c
+    xcu: 0,
+    ycu: 0,
+    xcuu: 0,
+    ycuu: 0,
+    xcl: 0,
+    ycl: 0,
+    xcll: 0,
+    ycll: 0,
+    color: "#000055",
+
+    draw: function() {
+        draw_pipe(this.xcl, this.ycl, this.length, this.angle, this.diameter, this.color);
+        draw_pipe(this.xcll, this.ycll, this.extra_bottom, this.angle, this.diameter, this.color);
+        draw_pipe(this.xcu, this.ycu, this.extra_top, this.angle, this.diameter, this.color);
+    }
+};
+
+/******************************************************************************/
 /* stery */
 var hs = {
-        th: 11.3,
-        td: 48,
-        xct: 0,
-        yct: 0,
-        bh: 11.3,
-        bd: 48,
-        xcb: 0,
-        ycb: 0
+        angle: 0, 
+        th: 11.3, // top height
+        td: 48, // top diameter
+        xt: 0, // x top
+        xtt: 0, // x top top
+        yt: 0, // y top
+        ytt: 0, // y top top
+        bh: 11.3, // bottom height
+        bd: 48, // botton diameter
+        xb: 0, // x bottom
+        xbb: 0, // x bottom bottom
+        yb: 0, // y bottom
+        ybb: 0, // y bottom bottom
+        color: "#000000",
+        
+        draw: function() {
+            draw_pipe(this.xt, this.yt, this.th, ht.angle, this.td);
+            draw_pipe(this.xbb, this.ybb, this.bh, ht.angle, this.bd);
+        }
     };   
 
 /* górna */
 var tt = {
-        angle: 180, //in
-        diameter: 25,
-        length: 560//560 //in
-    };
+
+    angle: 180, //in
+    diameter: 25,
+    length: 560,//560 //in
+    xcs: 0, //out
+    ycs: 0, //out
+    xch: 0, //out
+    ych: 0, //out
+    color: "#0000ee",
+
+    draw: function() {
+        draw_pipe(this.xcs, this.ycs, tt.length, tt.angle, tt.diameter);
+    }
+};
     
 /* koło */
 var f_wheel = {
-        diameter: 622, //in
-        tyre: 35, //in
-        xc: 0, //out
-        yc: 0 //out
-    };
+    diameter: 622, //in
+    tyre: 35, //in
+    xc: 0, //out
+    yc: 0, //out
+    
+    draw: function() {
+        draw_circle_scaled(this.xc, this.yc, this.diameter/2, "#ff0000");
+        draw_circle_scaled(this.xc, this.yc, this.diameter/2 + this.tyre,"#ff0000");
+        draw_circle_scaled(this.xc, this.yc, 5,"#000000");
+    }
+};
 
 /* koło */
 var r_wheel = {
         diameter: 622, //in
         tyre: 35, //in
         xc: 0, //out
-        yc: 0 //out
+        yc: 0, //out
+        
+        draw: f_wheel.draw
     };
 
 /* suport */
 var bb = {
-        offset: 60, //in
-        diameter: 38, //in
-        width: 68, //in
-        xc: 0, //out
-        yc: 0 //out
-    };
+
+    offset: 55, //in
+    diameter: 38, //in
+    width: 68, //in
+    xc: 0, //out
+    yc: 0, //out
+    color: "#dd0000",
+
+    draw: function() {
+        draw_circle_scaled(this.xc, this.yc, this.diameter/2, this.color);
+    }
+};
 
 /* widełki dolne */
 var cs = {
-        offset: 400, //in
-        diameter:18, //in
-        bb_z_offset: 17, //in
-        angle: 0, //out
-        length: 0, //out
-        xc: 0, //out
-        yc: 0 //out
-    };
+    offset: 400, //in
+    diameter:18, //in
+    bb_z_offset: 17, //in
+    angle: 0, //out
+    length: 0, //out
+    xcd: 0, //out
+    ycd: 0, //out
+    xcb: 0,
+    ycb: 0,
+    color: "#0000ff",
+        
+    draw: function() {
+        draw_pipe(bb.xc, bb.yc, cs.length, cs.angle, cs.diameter);
+    }
+};
 
 var ss = {
-        diameter: 12, //in
-        angle: 0, //out
-        length: 0, //out
-        xc: 0, //out
-        yc: 0 //out
+    diameter: 12, //in
+    angle: 0, //out
+    length: 0, //out
+    xcd: 0, //out
+    ycd: 0, //out
+    xct: 0,
+    yct: 0,
+    color: "#000099",
+    
+    draw: function() {
+        draw_pipe(this.xcd, this.ycd, this.length, this.angle, this.diameter, this.color);
     }
+}
 
 /* dolna */
 var dt = {
-        angle: 0, //out
-        diameter: 28,
-        length: 0 //out
-    };
+    angle: 0, //out
+    diameter: 28,
+    xcb: 0,
+    ycb: 0,
+    xct: 0,
+    yct: 0,
+    length: 0, //out
+    color: "#000066",
+        
+    draw: function() {
+        draw_pipe(this.xct, this.yct, this.length, -this.angle, this.diameter);
+    }
+};
 
 var fork = {
-        offset: 50, // in
-        diameter: 20, //in
-        angle: 0, //out
-        length: 0, // out
-        xc: 0, //out
-        yc: 0 //out
-    };
+    offset: 50, // in
+    diameter: 20, //in
+    angle: 0, //out
+    length: 0, // out
+    xct: 0, //out
+    yct: 0, //out
+    xcb: 0,
+    ycb: 0,
+    color: "aa0000",
+        
+    draw: function() {
+        draw_pipe(this.xcb, this.ycb, this.length, this.angle, this.diameter);
+    }
+};
 
+/******************************************************************************/
 var cranks = {
-        length: 175, // in
-        angle: 0, //out
-        teeth: 50, //in
-        radius: 0, //out
-        chainline: 41.5, //in
-        xc: 0, //out
-        yc: 0 //out
-    };
 
+    length: 175, // in
+    angle: 0, //out
+    teeth: 50, //in
+    radius: 0, //out
+    chainline: 41.5, //in
+    crank_z_internal: 46, //in
+    crank_z_external: 56, //in
+    xc: 0, //out
+    yc: 0, //out
+    xce: 0,
+    yce: 0,
+    color: "#000000",
+
+    draw: function() {
+        draw_line_scaled(this.xc, this.yc, this.xce, this.yce, this.color);
+        draw_circle_scaled(this.xc, this.yc, this.radius, this.color);
+    }
+};
+
+/******************************************************************************/
 var pedals = {
-        length: 95, //in
-        angle: 0, //out
-        xc: 0, //out
-        yc: 0 //out
-    };
+
+    length: 95, //in
+    angle: 0, //out
+    z_internal: 82, //in
+    z_external: 162, //in
+    xc: 0, //out
+    yc: 0, //out
+    color: "#00aa00",
+
+    draw: function() {
+        draw_line_scaled(
+        this.xc - this.length/2*Math.cos(this.angle*Math.PI/180),
+        this.yc - this.length/2*Math.sin(this.angle*Math.PI/180),
+        this.xc + this.length/2*Math.cos(this.angle*Math.PI/180),
+        this.yc + this.length/2*Math.sin(this.angle*Math.PI/180),
+        this.color);
+    }
+};
+/******************************************************************************/
 
 var dropout = {
-        ss_offset_x: 10, //in
+        ss_offset_x: 0, //in
         ss_offset_y: 20, //in
         cs_offset_x: 20, //in
         cs_offset_y: 0, //in
@@ -212,7 +324,7 @@ function draw_circle_scaled(x,y,r,kolor)
         kolor);
 }
 
-function draw_pipe(x1,y1, length, angle, diameter)
+function draw_pipe(x1,y1, length, angle, diameter, color)
 {
     let dx = Math.cos((angle + 90)*Math.PI/180)*diameter/2;
     let dy = Math.sin((angle + 90)*Math.PI/180)*diameter/2;
@@ -220,13 +332,13 @@ function draw_pipe(x1,y1, length, angle, diameter)
     let x2 = x1 + Math.cos(angle*Math.PI/180) * length;
     let y2 = y1 + Math.sin(angle*Math.PI/180) * length;
     
-    draw_line_scaled(x1, y1, x2, y2, "#00aaff");
+    draw_line_scaled(x1, y1, x2, y2, color);
 
-    draw_line_scaled(x1 + dx, y1 + dy, x2 + dx, y2 + dy, "#00aaff");
-    draw_line_scaled(x1 - dx, y1 - dy, x2 - dx, y2 - dy, "#00aaff");
+    draw_line_scaled(x1 + dx, y1 + dy, x2 + dx, y2 + dy, color);
+    draw_line_scaled(x1 - dx, y1 - dy, x2 - dx, y2 - dy, color);
 
-    draw_line_scaled(x1 + dx, y1 + dy, x1 - dx, y1 - dy, "#00aaff");
-    draw_line_scaled(x2 + dx, y2 + dy, x2 - dx, y2 - dy, "#00aaff");    
+    draw_line_scaled(x1 + dx, y1 + dy, x1 - dx, y1 - dy, color);
+    draw_line_scaled(x2 + dx, y2 + dy, x2 - dx, y2 - dy, color);    
 }
 
 function angle_from_line(x1,y1,x2,y2)
@@ -245,77 +357,125 @@ function length_from_line(x1,y1,x2,y2)
     return Math.sqrt(a*a + b*b);
 }
 
+function vector_length(dx, dy, dz)
+{    
+    return Math.sqrt((dx*dx) + (dy*dy) + (dz*dz));
+}
+
+function angle_from_vectors(dx1, dy1, dz1, dx2, dy2, dz2)
+{
+    let l1 = vector_length(dx1, dy1, dz1);
+    let l2 = vector_length(dx2, dy2, dz2);
+    
+    let scalar = dx1*dx2 + dy1*dy2 + dz1*dz2;
+    
+    let result = Math.acos(scalar / (l1 * l2));
+    
+    console.log("angle from vectors: ", result, " rad");
+    console.log("angle from vectors: ", result * 180 / Math.PI, " deg");
+    
+    return result; 
+}
+
+
 function calculate()
 {
+    //bb
     bb.xc = 0;
     bb.yc = - bb.offset;
 
-    st.xc = bb.xc + Math.cos(st.angle*Math.PI/180) * st.length;
-    st.yc = bb.yc + Math.sin(st.angle*Math.PI/180) * st.length;
+    //st
+    st.xcb = bb.xc;
+    st.ycb = bb.yc;
+    st.xct = bb.xc + Math.cos(st.angle*Math.PI/180) * st.length;
+    st.yct = bb.yc + Math.sin(st.angle*Math.PI/180) * st.length;
 
-    ht.xcu = st.xc + Math.cos(tt.angle*Math.PI/180) * tt.length;
-    ht.ycu = st.yc + Math.sin(tt.angle*Math.PI/180) * tt.length;
+    //tt
+    tt.xcs = st.xct;
+    tt.ycs = st.yct;
+    tt.xch = tt.xcs + Math.cos(tt.angle*Math.PI/180) * tt.length;
+    tt.ych = tt.ycs + Math.sin(tt.angle*Math.PI/180) * tt.length;
 
+    //ht & hs
+    ht.xcu = tt.xch;
+    ht.ycu = tt.ych;
     ht.xcuu = ht.xcu + Math.cos(ht.angle*Math.PI/180) * ht.extra_top;
     ht.ycuu = ht.ycu + Math.sin(ht.angle*Math.PI/180) * ht.extra_top;
-
-    hs.xct = ht.xcuu + Math.cos(ht.angle*Math.PI/180) * hs.th;
-    hs.yct = ht.ycuu + Math.sin(ht.angle*Math.PI/180) * hs.th;
-
+    
     ht.xcl = ht.xcu - Math.cos(ht.angle*Math.PI/180) * ht.length;
     ht.ycl = ht.ycu - Math.sin(ht.angle*Math.PI/180) * ht.length;
-
     ht.xcll = ht.xcl - Math.cos(ht.angle*Math.PI/180) * ht.extra_bottom;
     ht.ycll = ht.ycl - Math.sin(ht.angle*Math.PI/180) * ht.extra_bottom;
 
-    hs.xcb = ht.xcll - Math.cos(ht.angle*Math.PI/180) * hs.bh;
-    hs.ycb = ht.ycll - Math.sin(ht.angle*Math.PI/180) * hs.bh;
+    hs.angle = ht.angle;
+
+    hs.xt = ht.xcuu;
+    hs.yt = ht.ycuu;
+    hs.xtt = hs.xt + Math.cos(hs.angle*Math.PI/180) * hs.th;
+    hs.ytt = hs.yt + Math.sin(hs.angle*Math.PI/180) * hs.th;
+
+    hs.xb = ht.xcll;
+    hs.yb = ht.ycll;
+    hs.xbb = hs.xb - Math.cos(hs.angle*Math.PI/180) * hs.bh;
+    hs.ybb = hs.yb - Math.sin(hs.angle*Math.PI/180) * hs.bh;
 
     console.log("ht.xcl ", ht.xcl);
     console.log("ht.ycl ", ht.ycl);
     console.log("bb.xc ", bb.xc);
     console.log("bb.yc ", bb.yc);
 
-    dt.angle = angle_from_line(ht.xcl, ht.ycl, bb.xc, bb.yc);
-    dt.length = length_from_line(ht.xcl, ht.ycl, bb.xc, bb.yc);
+    dt.xcb = bb.xc;
+    dt.ycb = bb.yc;
+    dt.xct = ht.xcl;
+    dt.yct = ht.ycl;
+    dt.angle = angle_from_line(dt.xct, dt.yct, dt.xcb, dt.ycb);
+    dt.length = length_from_line(dt.xct, dt.yct, dt.xcb, dt.ycb);
 
     console.log("dt length: ", dt.length);
 
     dropout.xc = bb.xc + cs.offset;
     dropout.yc = 0;
 
-    cs.xc = dropout.xc - dropout.cs_offset_x;
-    cs.yc = dropout.yc + dropout.cs_offset_y;
-    cs.angle = angle_from_line(bb.xc, bb.yc, cs.xc, cs.yc);
-    cs.length = length_from_line(bb.xc, bb.yc, cs.xc, cs.yc);
+    cs.xcd = dropout.xc - dropout.cs_offset_x;
+    cs.ycd = dropout.yc + dropout.cs_offset_y;
+    cs.xcb = bb.xc;
+    cs.ycb = bb.yc;
+    cs.angle = angle_from_line(cs.xcb, cs.ycb, cs.xcd, cs.ycd);
+    cs.length = length_from_line(cs.xcb, cs.ycb, cs.xcd, cs.ycd);
 
-    ss.xc = dropout.xc - dropout.ss_offset_x;
-    ss.yc = dropout.yc + dropout.ss_offset_y;
-    ss.angle = angle_from_line(ss.xc, ss.yc, st.xc, st.yc);
-    ss.length = length_from_line(ss.xc, ss.yc, st.xc, st.yc);
-
-    fork.xc = hs.xcb - fork.offset - 1 / Math.tan(ht.angle*Math.PI/180) * hs.ycb;
-    fork.yc = 0;
-    fork.angle = angle_from_line(fork.xc, fork.yc, hs.xcb, hs.ycb);
-    fork.length = length_from_line(fork.xc, fork.yc, hs.xcb, hs.ycb);
+    ss.xcd = dropout.xc - dropout.ss_offset_x;
+    ss.ycd = dropout.yc + dropout.ss_offset_y;
+    ss.xct = st.xct;
+    ss.yct = st.yct;
+    ss.angle = angle_from_line(ss.xcd, ss.ycd, ss.xct, ss.yct);
+    ss.length = length_from_line(ss.xcd, ss.ycd, ss.xct, ss.yct);
+    
+    fork.xct = hs.xbb;
+    fork.yct = hs.ybb;
+    fork.xcb = hs.xbb - fork.offset - 1 / Math.tan(ht.angle*Math.PI/180) * hs.ybb;
+    fork.ycb = 0;
+    fork.angle = angle_from_line(fork.xcb, fork.ycb, fork.xct, fork.yct);
+    fork.length = length_from_line(fork.xcb, fork.ycb, fork.xct, fork.yct);
 
     console.log("fork length ", fork.length);
 
-    cranks.angle = angle_from_line(bb.xc, bb.yc, fork.xc, fork.yc);
-    cranks.xc = bb.xc + cranks.length*Math.cos(cranks.angle*Math.PI/180);
-    cranks.yc = bb.yc + cranks.length*Math.sin(cranks.angle*Math.PI/180);
+    cranks.angle = angle_from_line(bb.xc, bb.yc, fork.xcb, fork.ycb);
+    cranks.xc = bb.xc;
+    cranks.yc = bb.yc;
+    cranks.xce = bb.xc + cranks.length*Math.cos(cranks.angle*Math.PI/180);
+    cranks.yce = bb.yc + cranks.length*Math.sin(cranks.angle*Math.PI/180);
     cranks.radius = 12.7 / Math.sin(Math.PI/cranks.teeth) / 2;
 
     pedals.angle = cranks.angle;
 
     console.log("pedals.angle ", pedals.angle);
     
-    pedals.xc = cranks.xc;// + pedals.length*Math.cos(pedals.angle);
-    pedals.yc = cranks.yc;// + pedals.length*Math.sin(pedals.angle);
+    pedals.xc = cranks.xce;// + pedals.length*Math.cos(pedals.angle);
+    pedals.yc = cranks.yce;// + pedals.length*Math.sin(pedals.angle);
 
 // do przełożenia gdzie indziej
-    let xtmp = fork.xc + (f_wheel.diameter/2 + f_wheel.tyre)*Math.cos((cranks.angle+180)*Math.PI/180);
-    let ytmp = fork.yc + (f_wheel.diameter/2 + f_wheel.tyre)*Math.sin((cranks.angle+180)*Math.PI/180);
+    let xtmp = fork.xcb + (f_wheel.diameter/2 + f_wheel.tyre)*Math.cos((cranks.angle+180)*Math.PI/180);
+    let ytmp = fork.ycb + (f_wheel.diameter/2 + f_wheel.tyre)*Math.sin((cranks.angle+180)*Math.PI/180);
 
     let xtmp2 = pedals.xc + pedals.length/2*Math.cos(pedals.angle*Math.PI/180);
     let ytmp2 = pedals.yc + pedals.length/2*Math.sin(pedals.angle*Math.PI/180);
@@ -326,8 +486,8 @@ function calculate()
     console.log("x pedal y pedal ", xtmp2, " ", ytmp2);
     console.log("tyre-pedal distance: ", length_from_line(xtmp,ytmp,xtmp2,ytmp2)); 
 // ~ do przełożenia gdzie indziej
-    f_wheel.xc = fork.xc;
-    f_wheel.yc = fork.yc;
+    f_wheel.xc = fork.xcb;
+    f_wheel.yc = fork.ycb;
 
     r_wheel.xc = dropout.xc;
     r_wheel.yc = dropout.yc;
@@ -336,7 +496,7 @@ function calculate()
 
     //zrobic cos z tym
     let ground_level = f_wheel.yc - f_wheel.diameter/2 - f_wheel.tyre;
-    let top_tube_top = st.yc + tt.diameter /2;
+    let top_tube_top = st.yct + tt.diameter /2;
     
     console.log("ground level: ", ground_level);
     console.log("standover height: ", top_tube_top - ground_level);
@@ -344,107 +504,19 @@ function calculate()
 
 function rysuj()
 {
-    /* bb */
-    draw_circle_scaled(bb.xc, bb.yc, bb.diameter/2,"#ff0000");
-
-    /* cranks */
-    draw_line_scaled(bb.xc, bb.yc, cranks.xc, cranks.yc);
-    draw_circle_scaled(bb.xc, bb.yc, cranks.radius, "#bb0000");
-
-    /* pedals */
-    draw_line_scaled(
-        pedals.xc - pedals.length/2*Math.cos(pedals.angle*Math.PI/180),
-        pedals.yc - pedals.length/2*Math.sin(pedals.angle*Math.PI/180),
-        pedals.xc + pedals.length/2*Math.cos(pedals.angle*Math.PI/180),
-        pedals.yc + pedals.length/2*Math.sin(pedals.angle*Math.PI/180),
-        "#00aa00");
-
-    /* st */
-    draw_pipe(bb.xc, bb.yc, st.length, st.angle, st.diameter);
-    draw_pipe(st.xc, st.yc, st.extra, st.angle, st.diameter);
-
-
-    /* tt */
-    draw_pipe(st.xc, st.yc, tt.length, tt.angle, tt.diameter);
-
-    /* ht */
-    draw_pipe(ht.xcl, ht.ycl, ht.length, ht.angle, ht.diameter);
-    draw_pipe(ht.xcll, ht.ycll, ht.extra_bottom, ht.angle, ht.diameter);
-    draw_pipe(ht.xcu, ht.ycu, ht.extra_top, ht.angle, ht.diameter);
-    /* hs */
-    draw_pipe(ht.xcuu, ht.ycuu, hs.th, ht.angle, hs.td);
-    draw_pipe(hs.xcb, hs.ycb, hs.bh, ht.angle, hs.bd);
-
-
-
-    /* dt */
-
-    draw_pipe(ht.xcl, ht.ycl, dt.length, -dt.angle, dt.diameter);
-
-    //draw_line_scaled(
-    //    ht.xcl, ht.ycl,
-    //    bb.xc, bb.yc,
-    //    "#222222");
-
-    /* cs */
-    //draw_line_scaled(
-    //    bb.xc, bb.yc,
-    //    cs.xc, cs.yc,        
-    //    "#222222");
-
-    draw_pipe(bb.xc, bb.yc, cs.length, cs.angle, cs.diameter);
-
-    /* ss */
-    //draw_line_scaled(
-    //    cs.xc, cs.yc,
-    //    st.xc, st.yc,             
-    //    "#222222");
-
-    draw_pipe(ss.xc, ss.yc, ss.length, ss.angle, ss.diameter);
-
-    /* fork */
-
-    draw_pipe(fork.xc, fork.yc, fork.length, fork.angle, fork.diameter);
-    //draw_line_scaled(
-    //    ht.xcll, ht.ycll,
-    //    fork.xc, fork.yc,             
-    //    "#222222");
-
-    /* f wheel */
-    draw_circle_scaled(f_wheel.xc, f_wheel.yc, f_wheel.diameter/2,"#ff0000");
-    draw_circle_scaled(f_wheel.xc, f_wheel.yc, f_wheel.diameter/2 + f_wheel.tyre,"#ff0000");
-    draw_circle_scaled(f_wheel.xc, f_wheel.yc, 5,"#000000");
-
-
-    /* r wheel */
-    draw_circle_scaled(r_wheel.xc, r_wheel.yc, r_wheel.diameter/2,"#ff0000");
-    draw_circle_scaled(r_wheel.xc, r_wheel.yc, r_wheel.diameter/2 + r_wheel.tyre,"#ff0000");
-    draw_circle_scaled(r_wheel.xc, r_wheel.yc, 5,"#000000");
-
-    /* dropout */
-    draw_line_scaled(dropout.xc - dropout.cs_offset_x, dropout.yc + dropout.cs_offset_y,
-        dropout.xc - dropout.ss_offset_x, dropout.yc + dropout.ss_offset_y,
-        "#000000");
-
-    draw_line_scaled(dropout.xc - dropout.ss_offset_x, dropout.yc + dropout.ss_offset_y,
-        dropout.xc + dropout.length, dropout.yc+5,
-        "#000000");
-
-    draw_line_scaled(dropout.xc + dropout.length, dropout.yc+5,
-        dropout.xc, dropout.yc+5,
-        "#000000");
-
-    draw_line_scaled(dropout.xc + dropout.length, dropout.yc-5,
-        dropout.xc, dropout.yc-5,
-        "#000000");
-
-    draw_line_scaled(dropout.xc - dropout.ss_offset_x, dropout.yc - dropout.ss_offset_y,
-        dropout.xc + dropout.length, dropout.yc-5,
-        "#000000");
-
-    draw_line_scaled(dropout.xc - dropout.ss_offset_x, dropout.yc - dropout.ss_offset_y,
-        dropout.xc - dropout.cs_offset_x, dropout.yc + dropout.cs_offset_y,
-        "#000000");
+    bb.draw();    
+    cranks.draw();
+    pedals.draw();
+    st.draw();
+    tt.draw();
+    ht.draw();
+    hs.draw();
+    dt.draw();
+    cs.draw();
+    ss.draw();
+    fork.draw();
+    f_wheel.draw();
+    r_wheel.draw();
 
     //--------------------------------------------------------------------------
     // chainstay drawing
@@ -501,7 +573,3 @@ function rysuj()
 
 }
 
-function rysuj_widelki()
-{
-    
-}

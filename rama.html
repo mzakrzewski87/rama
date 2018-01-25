@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Szablony do spasowywania rur / Pipe miter templates</title>
+    <title>Wymiarowanie ramy rowerowej/ bicycle frame sizing</title>
   
     <style>
         table, p
@@ -28,7 +28,9 @@
 <table>
     <tr>
         <td>
-            <button onclick="calculate();rysuj();">rysuj</button>
+            <button onclick="ctx.clearRect(0, 0, canvas.width, canvas.height);
+                calculate();
+                rysuj();">rysuj</button>
         </td>
     </tr>
 </table>
