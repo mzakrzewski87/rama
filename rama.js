@@ -31,16 +31,18 @@
  * Jeśli nie - zobacz http://www.gnu.org/licenses/
  */
 
-/* globalne */
-
 /******************************************************************************/
-/* podsiodłowa */
+/* frame pieces */
+/******************************************************************************/
+/* podsiodłowa / seat tube*/
+/******************************************************************************/
+
 var st = {
 
     angle: 74.5, //in
-    diameter: 28,
+    diameter: 28, // in
     length: 550, //560, //in
-    extra: 30,
+    extra: 30, // in; extra length to top
     xct: 0, //out, x of the c-c with the top tube
     yct: 0, //out, y of the c-c with the top tube,
     xcb: 0, //out, same as x of bb center
@@ -54,12 +56,14 @@ var st = {
 };
 
 /******************************************************************************/
-/* główka */
+/* główka / headtube */
+/******************************************************************************/
+
 var ht = {
 
     angle: 74.5, //in
     diameter: 38,
-    length: 50,// in c-c
+    length: 45,// in c-c
     extra_top: 40, // in t-c
     extra_bottom: 40, // in b-c
     xcu: 0,
@@ -80,7 +84,9 @@ var ht = {
 };
 
 /******************************************************************************/
-/* stery */
+/* stery / headset*/
+/******************************************************************************/
+
 var hs = {
         angle: 0, 
         th: 11.3, // top height
@@ -103,7 +109,10 @@ var hs = {
         }
     };   
 
-/* górna */
+/******************************************************************************/
+/* górna / top tube*/
+/******************************************************************************/
+
 var tt = {
 
     angle: 180, //in
@@ -119,8 +128,10 @@ var tt = {
         draw_pipe(this.xcs, this.ycs, tt.length, tt.angle, tt.diameter);
     }
 };
-    
-/* koło */
+/******************************************************************************/
+/* koło przednie / front wheel */
+/******************************************************************************/
+
 var f_wheel = {
     diameter: 622, //in
     tyre: 35, //in
@@ -133,8 +144,10 @@ var f_wheel = {
         draw_circle_scaled(this.xc, this.yc, 5,"#000000");
     }
 };
+/******************************************************************************/
+/* koło tylnie / rear wheel */
+/******************************************************************************/
 
-/* koło */
 var r_wheel = {
         diameter: 622, //in
         tyre: 35, //in
@@ -143,11 +156,13 @@ var r_wheel = {
         
         draw: f_wheel.draw
     };
+/******************************************************************************/
+/* suport / bottom bracket */
+/******************************************************************************/
 
-/* suport */
 var bb = {
 
-    offset: 55, //in
+    offset: 60, //in // bb drop
     diameter: 38, //in
     width: 68, //in
     xc: 0, //out
@@ -159,40 +174,61 @@ var bb = {
     }
 };
 
-/* widełki dolne */
+/******************************************************************************/
+/* widełki dolne / chainstays */
+/******************************************************************************/
+
 var cs = {
     offset: 400, //in
     diameter:18, //in
     bb_z_offset: 17, //in
     angle: 0, //out
-    length: 0, //out
+    angle_with_bb: 0, //out
+    angle_with_dropout: 0, //out
+    length_xy: 0, //out
+    length_total: 0, //out
     xcd: 0, //out
     ycd: 0, //out
+    zcd: 0, //out
     xcb: 0,
     ycb: 0,
+    zcb: 0, 
     color: "#0000ff",
         
     draw: function() {
-        draw_pipe(bb.xc, bb.yc, cs.length, cs.angle, cs.diameter);
+        draw_pipe(bb.xc, bb.yc, cs.length_xy, cs.angle, cs.diameter);
     }
 };
+
+/******************************************************************************/
+/* widełki górne / seatstays */
+/******************************************************************************/
 
 var ss = {
     diameter: 12, //in
     angle: 0, //out
-    length: 0, //out
+    angle_to_st: 0, //out
+    angle_to_dropout: 0, //out
+    length_xy: 0, //out, length of projection onto xy plane
+    length_total: 0, //out, real length
     xcd: 0, //out
     ycd: 0, //out
-    xct: 0,
-    yct: 0,
+    zcd: 0, //out
+    xct: 0, //out
+    yct: 0, //out
+    zct: 0, //out
+    st_z_offset: 8, //in
     color: "#000099",
     
     draw: function() {
-        draw_pipe(this.xcd, this.ycd, this.length, this.angle, this.diameter, this.color);
+        draw_pipe(this.xcd, this.ycd, this.length_xy, this.angle, this.diameter, this.color);
     }
 }
 
-/* dolna */
+/******************************************************************************/
+/* dolna / down tube */
+/******************************************************************************/
+
 var dt = {
     angle: 0, //out
     diameter: 28,
@@ -207,6 +243,10 @@ var dt = {
         draw_pipe(this.xct, this.yct, this.length, -this.angle, this.diameter);
     }
 };
+
+/******************************************************************************/
+/* widelec / fork */
+/******************************************************************************/
 
 var fork = {
     offset: 50, // in
@@ -225,6 +265,9 @@ var fork = {
 };
 
 /******************************************************************************/
+/* korba / crank(set) */
+/******************************************************************************/
+
 var cranks = {
 
     length: 175, // in
@@ -247,6 +290,9 @@ var cranks = {
 };
 
 /******************************************************************************/
+/* pedały / pedals */
+/******************************************************************************/
+
 var pedals = {
 
     length: 95, //in
@@ -267,6 +313,8 @@ var pedals = {
     }
 };
 /******************************************************************************/
+/* haki / dropouts */
+/******************************************************************************/
 
 var dropout = {
         ss_offset_x: 0, //in
@@ -280,6 +328,10 @@ var dropout = {
         yc: 0 //out
     };
 
+/******************************************************************************/
+/* other variables */
+/******************************************************************************/
+
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
@@ -287,6 +339,13 @@ var x0 = canvas.width / 2 + 100;
 var y0 = canvas.height / 2 - 50;
 
 var scale = 1;//0.5;
+
+var summary = "";
+
+
+/******************************************************************************/
+/* functions */
+/******************************************************************************/
 
 function draw_line(x1,y1,x2,y2,kolor)
 {
@@ -362,6 +421,7 @@ function vector_length(dx, dy, dz)
     return Math.sqrt((dx*dx) + (dy*dy) + (dz*dz));
 }
 
+/* result in radians not degrees */
 function angle_from_vectors(dx1, dy1, dz1, dx2, dy2, dz2)
 {
     let l1 = vector_length(dx1, dy1, dz1);
@@ -371,32 +431,45 @@ function angle_from_vectors(dx1, dy1, dz1, dx2, dy2, dz2)
     
     let result = Math.acos(scalar / (l1 * l2));
     
-    console.log("angle from vectors: ", result, " rad");
-    console.log("angle from vectors: ", result * 180 / Math.PI, " deg");
-    
     return result; 
 }
 
 
 function calculate()
 {
+    summary = "";
+    
     //bb
     bb.xc = 0;
     bb.yc = - bb.offset;
+    
+    summary += "bottom bracket offset: " + bb.offset.toPrecision(4) + " mm\n";
+    summary += "\n";
 
     //st
     st.xcb = bb.xc;
     st.ycb = bb.yc;
     st.xct = bb.xc + Math.cos(st.angle*Math.PI/180) * st.length;
     st.yct = bb.yc + Math.sin(st.angle*Math.PI/180) * st.length;
-
+    
+    summary += "seat tube length c-c: " + st.length.toPrecision(4) + " mm\n";
+    summary += "seat tube length c-t: " + (st.length + st.extra).toPrecision(4) + " mm\n";
+    summary += "seat tube angle with ground: " + st.angle.toPrecision(4) + " deg\n";
+    summary += "seat tube diameter: " + st.diameter.toPrecision(4) + " mm\n";
+    summary += "\n";
+    
     //tt
     tt.xcs = st.xct;
     tt.ycs = st.yct;
     tt.xch = tt.xcs + Math.cos(tt.angle*Math.PI/180) * tt.length;
     tt.ych = tt.ycs + Math.sin(tt.angle*Math.PI/180) * tt.length;
+    
+    summary += "top tube length c-c: " + tt.length.toPrecision(4) + " mm\n";
+    summary += "top tube angle with ground: " + (tt.angle - 180).toPrecision(4) + " deg\n";
+    summary += "top tube diameter: " + st.diameter.toPrecision(4) + " mm\n";
+    summary += "\n";
 
-    //ht & hs
+    //ht
     ht.xcu = tt.xch;
     ht.ycu = tt.ych;
     ht.xcuu = ht.xcu + Math.cos(ht.angle*Math.PI/180) * ht.extra_top;
@@ -406,7 +479,14 @@ function calculate()
     ht.ycl = ht.ycu - Math.sin(ht.angle*Math.PI/180) * ht.length;
     ht.xcll = ht.xcl - Math.cos(ht.angle*Math.PI/180) * ht.extra_bottom;
     ht.ycll = ht.ycl - Math.sin(ht.angle*Math.PI/180) * ht.extra_bottom;
+    
+    summary += "head tube length c-c: " + ht.length.toPrecision(4) + " mm\n";
+    summary += "head tube length total: " + (ht.length + ht.extra_top + ht.extra_bottom).toPrecision(4) + " mm\n";
+    summary += "head tube angle with ground: " + ht.angle.toPrecision(4) + " deg\n";
+    summary += "head tube diameter: " + ht.diameter.toPrecision(4) + " mm\n";
+    summary += "\n";
 
+    //hs
     hs.angle = ht.angle;
 
     hs.xt = ht.xcuu;
@@ -418,12 +498,14 @@ function calculate()
     hs.yb = ht.ycll;
     hs.xbb = hs.xb - Math.cos(hs.angle*Math.PI/180) * hs.bh;
     hs.ybb = hs.yb - Math.sin(hs.angle*Math.PI/180) * hs.bh;
+    
+    summary += "headset top height: " + hs.th.toPrecision(4) + " mm\n";
+    summary += "headset top diameter: " + hs.td.toPrecision(4) + " mm\n";
+    summary += "headset bottom height: " + hs.bh.toPrecision(4) + " mm\n";
+    summary += "headset bottom diameter: " + hs.bd.toPrecision(4) + " mm\n";
+    summary += "\n";
 
-    console.log("ht.xcl ", ht.xcl);
-    console.log("ht.ycl ", ht.ycl);
-    console.log("bb.xc ", bb.xc);
-    console.log("bb.yc ", bb.yc);
-
+    //dt
     dt.xcb = bb.xc;
     dt.ycb = bb.yc;
     dt.xct = ht.xcl;
@@ -431,25 +513,68 @@ function calculate()
     dt.angle = angle_from_line(dt.xct, dt.yct, dt.xcb, dt.ycb);
     dt.length = length_from_line(dt.xct, dt.yct, dt.xcb, dt.ycb);
 
-    console.log("dt length: ", dt.length);
+    summary += "down tube length c-c: " + dt.length.toPrecision(4) + " mm\n";
+    summary += "down tube angle with ground: " + (dt.angle).toPrecision(4) + " deg\n";
+    summary += "down tube diameter: " + dt.diameter.toPrecision(4) + " mm\n";
+    summary += "\n";
 
+    //dropout
     dropout.xc = bb.xc + cs.offset;
     dropout.yc = 0;
 
+    //cs
     cs.xcd = dropout.xc - dropout.cs_offset_x;
     cs.ycd = dropout.yc + dropout.cs_offset_y;
+    cs.zcd = dropout.span/2 + dropout.thickness/2;
     cs.xcb = bb.xc;
     cs.ycb = bb.yc;
+    cs.zcb = cs.bb_z_offset;
     cs.angle = angle_from_line(cs.xcb, cs.ycb, cs.xcd, cs.ycd);
-    cs.length = length_from_line(cs.xcb, cs.ycb, cs.xcd, cs.ycd);
+    cs.length_xy = length_from_line(cs.xcb, cs.ycb, cs.xcd, cs.ycd);
+    
+    cs.length_total = vector_length(cs.xcd - cs.xcb, cs.ycd - cs.ycb, cs.zcd - cs.zcb);
+    
+    cs.angle_with_bb = angle_from_vectors(
+        0, 0, 1, // the bottom bracket axis is purely in z
+        cs.xcd - cs.xcb, cs.ycd - cs.ycb, cs.zcd - cs.zcb) *180 / Math.PI;
+    
+    cs.angle_with_dropout = 90 - cs.angle_with_bb;
+    
+    summary += "chainstay real length: " + cs.length_total.toPrecision(4) + " mm\n";
+    summary += "chainstay angle with bottom bracket: " + cs.angle_with_bb.toPrecision(4) + " deg\n";
+    summary += "chainstay angle with dropout plane: " + cs.angle_with_dropout.toPrecision(4) + " deg\n";
+    summary += "\n";
 
+    //ss
     ss.xcd = dropout.xc - dropout.ss_offset_x;
     ss.ycd = dropout.yc + dropout.ss_offset_y;
+    ss.zcd = dropout.span/2 + dropout.thickness/2;
     ss.xct = st.xct;
     ss.yct = st.yct;
+    ss.zct = ss.st_z_offset;
     ss.angle = angle_from_line(ss.xcd, ss.ycd, ss.xct, ss.yct);
-    ss.length = length_from_line(ss.xcd, ss.ycd, ss.xct, ss.yct);
+    ss.length_xy = length_from_line(ss.xcd, ss.ycd, ss.xct, ss.yct);
     
+    ss.length_total = vector_length(ss.xct - ss.xcd, ss.yct - ss.ycd, ss.zct, ss.zcd);
+    
+    ss.angle_to_st = angle_from_vectors(
+        st.xct - st.xcb, st.yct - st.ycb, 0, // seat tube has zero diff in z axis
+        ss.xct - ss.xcd, ss.xcd - ss.ycd, ss.zct - ss.zcd) *180 / Math.PI;
+        
+    ss.angle_to_dropout = angle_from_vectors(
+        0, 0, 1, // z axis is perpendicular to dropout plane
+        ss.xct - ss.xcd, ss.xcd - ss.ycd, ss.zct - ss.zcd) *180 / Math.PI;
+    
+    /* calculated above was actually angle to axis perpendicular to dropout plane */
+    ss.angle_to_dropout = ss.angle_to_dropout - 90;
+    
+    summary += "seatstay real length: " + ss.length_total.toPrecision(4) + " mm\n";
+    summary += "seatstay angle to ground: " + ss.angle.toPrecision(4) + " deg\n";
+    summary += "seatstay angle to seat tube: " + ss.angle_to_st.toPrecision(4) + " deg\n";
+    summary += "seatstay angle to dropout plane: " + ss.angle_to_dropout.toPrecision(4) + " deg\n";
+    summary += "\n";
+    
+    //fork
     fork.xct = hs.xbb;
     fork.yct = hs.ybb;
     fork.xcb = hs.xbb - fork.offset - 1 / Math.tan(ht.angle*Math.PI/180) * hs.ybb;
@@ -457,7 +582,8 @@ function calculate()
     fork.angle = angle_from_line(fork.xcb, fork.ycb, fork.xct, fork.yct);
     fork.length = length_from_line(fork.xcb, fork.ycb, fork.xct, fork.yct);
 
-    console.log("fork length ", fork.length);
+    summary += "fork length: " + fork.length.toPrecision(4) + " mm\n";
+    summary += "\n";
 
     cranks.angle = angle_from_line(bb.xc, bb.yc, fork.xcb, fork.ycb);
     cranks.xc = bb.xc;
@@ -468,7 +594,7 @@ function calculate()
 
     pedals.angle = cranks.angle;
 
-    console.log("pedals.angle ", pedals.angle);
+    //console.log("pedals.angle ", pedals.angle);
     
     pedals.xc = cranks.xce;// + pedals.length*Math.cos(pedals.angle);
     pedals.yc = cranks.yce;// + pedals.length*Math.sin(pedals.angle);
@@ -482,9 +608,11 @@ function calculate()
 
     draw_line_scaled(xtmp, ytmp, xtmp2, ytmp2, "#000000");
 
-    console.log("x tyre y tyre ", xtmp, " ", ytmp);
-    console.log("x pedal y pedal ", xtmp2, " ", ytmp2);
-    console.log("tyre-pedal distance: ", length_from_line(xtmp,ytmp,xtmp2,ytmp2)); 
+    //console.log("x tyre y tyre ", xtmp, " ", ytmp);
+    //console.log("x pedal y pedal ", xtmp2, " ", ytmp2);
+    let tyre_pedal_dist = length_from_line(xtmp,ytmp,xtmp2,ytmp2);
+    summary += "tyre-pedal distance: " + tyre_pedal_dist.toPrecision(4) + " mm\n"; 
+    summary += "\n";
 // ~ do przełożenia gdzie indziej
     f_wheel.xc = fork.xcb;
     f_wheel.yc = fork.ycb;
@@ -492,14 +620,18 @@ function calculate()
     r_wheel.xc = dropout.xc;
     r_wheel.yc = dropout.yc;
 
-    console.log("wheelbase: ", r_wheel.xc - f_wheel.xc);
+    summary += "wheelbase: " + (r_wheel.xc - f_wheel.xc).toPrecision(4) + " mm\n"; 
+    summary += "\n";
 
     //zrobic cos z tym
     let ground_level = f_wheel.yc - f_wheel.diameter/2 - f_wheel.tyre;
     let top_tube_top = st.yct + tt.diameter /2;
     
-    console.log("ground level: ", ground_level);
-    console.log("standover height: ", top_tube_top - ground_level);
+    summary += "standover height at tt-st joint: " + (top_tube_top - ground_level).toPrecision(4) + " mm\n"; 
+    summary += "\n";    
+    
+    document.getElementById("summary").innerHTML = summary;
+
 }
 
 function rysuj()
