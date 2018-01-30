@@ -183,8 +183,8 @@ var cs = {
     diameter:18, //in
     bb_z_offset: 17, //in
     angle: 0, //out
-    angle_with_bb: 0, //out
-    angle_with_dropout: 0, //out
+    angle_to_bb: 0, //out
+    angle_to_dropout: 0, //out
     length_xy: 0, //out
     length_total: 0, //out
     xcd: 0, //out
@@ -534,15 +534,16 @@ function calculate()
     
     cs.length_total = vector_length(cs.xcd - cs.xcb, cs.ycd - cs.ycb, cs.zcd - cs.zcb);
     
-    cs.angle_with_bb = angle_from_vectors(
+    cs.angle_to_bb = angle_from_vectors(
         0, 0, 1, // the bottom bracket axis is purely in z
         cs.xcd - cs.xcb, cs.ycd - cs.ycb, cs.zcd - cs.zcb) *180 / Math.PI;
     
-    cs.angle_with_dropout = 90 - cs.angle_with_bb;
+    cs.angle_to_dropout = 90 - cs.angle_to_bb;
     
     summary += "chainstay real length: " + cs.length_total.toPrecision(4) + " mm\n";
-    summary += "chainstay angle with bottom bracket: " + cs.angle_with_bb.toPrecision(4) + " deg\n";
-    summary += "chainstay angle with dropout plane: " + cs.angle_with_dropout.toPrecision(4) + " deg\n";
+    summary += "chainstay angle to bottom bracket: " + cs.angle_to_bb.toPrecision(4) + " deg\n";
+    summary += "chainstay angle to dropout plane: " + cs.angle_to_dropout.toPrecision(4) + " deg\n";
+    summary += "chainstay angle to ground in projection to dropout plane: " + cs.angle.toPrecision(4) + " deg\n";
     summary += "\n";
 
     //ss
@@ -569,7 +570,7 @@ function calculate()
     ss.angle_to_dropout = ss.angle_to_dropout - 90;
     
     summary += "seatstay real length: " + ss.length_total.toPrecision(4) + " mm\n";
-    summary += "seatstay angle to ground: " + ss.angle.toPrecision(4) + " deg\n";
+    summary += "seatstay angle to ground in projection to dropout plane: " + (180 - ss.angle).toPrecision(4) + " deg\n";
     summary += "seatstay angle to seat tube: " + ss.angle_to_st.toPrecision(4) + " deg\n";
     summary += "seatstay angle to dropout plane: " + ss.angle_to_dropout.toPrecision(4) + " deg\n";
     summary += "\n";
@@ -630,8 +631,26 @@ function calculate()
     summary += "standover height at tt-st joint: " + (top_tube_top - ground_level).toPrecision(4) + " mm\n"; 
     summary += "\n";    
     
+    let ht_tt_angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
+        tt.xch - tt.xcs, tt.ych - tt.ycs, 0) *180 / Math.PI;
+        
+    summary += "head tube - seat tube angle: " + ht_tt_angle.toPrecision(4) + " deg\n"; 
+    summary += "\n";  
+    
+    let ht_dt_angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
+        dt.xcb - dt.xct, dt.ycb - dt.yct, 0) *180 / Math.PI;
+        
+    summary += "head tube - down tube angle: " + ht_dt_angle.toPrecision(4) + " deg\n"; 
+    summary += "\n";  
+    
+    let st_dt_angle = angle_from_vectors(st.xcb - st.xct, st.ycb - st.yct, 0,
+        dt.xcb - dt.xct, dt.ycb - dt.yct, 0) *180 / Math.PI;
+        
+    summary += "seat tube - down tube angle: " + st_dt_angle.toPrecision(4) + " deg\n"; 
+    summary += "\n";  
+    
+    
     document.getElementById("summary").innerHTML = summary;
-
 }
 
 function rysuj()
