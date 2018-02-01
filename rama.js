@@ -304,12 +304,20 @@ var pedals = {
     color: "#00aa00",
 
     draw: function() {
-        draw_line_scaled(
-        this.xc - this.length/2*Math.cos(this.angle*Math.PI/180),
-        this.yc - this.length/2*Math.sin(this.angle*Math.PI/180),
-        this.xc + this.length/2*Math.cos(this.angle*Math.PI/180),
-        this.yc + this.length/2*Math.sin(this.angle*Math.PI/180),
-        this.color);
+        
+        draw_pipe(this.xc - this.length/2*Math.cos(this.angle*Math.PI/180),
+            this.yc - this.length/2*Math.sin(this.angle*Math.PI/180),
+            this.length,
+            this.angle,
+            20,
+            this.color);
+
+        //draw_line_scaled(
+        //this.xc - this.length/2*Math.cos(this.angle*Math.PI/180),
+        //this.yc - this.length/2*Math.sin(this.angle*Math.PI/180),
+        //this.xc + this.length/2*Math.cos(this.angle*Math.PI/180),
+        //this.yc + this.length/2*Math.sin(this.angle*Math.PI/180),
+        //this.color);
     }
 };
 /******************************************************************************/
@@ -317,9 +325,9 @@ var pedals = {
 /******************************************************************************/
 
 var dropout = {
-        ss_offset_x: 0, //in
-        ss_offset_y: 20, //in
-        cs_offset_x: 20, //in
+        ss_offset_x: -12.5, //in
+        ss_offset_y: 12.5, //in
+        cs_offset_x: 12.5, //in
         cs_offset_y: 0, //in
         span: 120, //in
         thickness: 5, //in
@@ -724,3 +732,14 @@ function rysuj()
 
 }
 
+function gather_input()
+{
+    st.angle = parseFloat(document.getElementById("tf_st_angle").value);
+    st.diameter = parseFloat(document.getElementById("tf_st_diameter").value);
+    st.extra = parseFloat(document.getElementById("tf_st_extra").value);
+
+    ht.angle = parseFloat(document.getElementById("tf_ht_angle").value);
+    ht.diameter = parseFloat(document.getElementById("tf_ht_diameter").value);
+    
+
+}

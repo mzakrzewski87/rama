@@ -27,18 +27,49 @@
 
 <table>
     <tr>
-        <td>
-            <button onclick="ctx.clearRect(0, 0, canvas.width, canvas.height);
-                calculate();
-                rysuj();">rysuj</button>
-        </td>
+        <td><input type="text" id="tf_st_angle" value="73"/></td>
+        <td>[deg/stopnie]</td>
+        <td>seat tube angle</td>
+        <td>kąt rury podsiodłowej</td>
     </tr>
     <tr>
-    <td>
-    <pre id="summary"></pre>
-    </td>
+        <td><input type="text" id="tf_st_diameter" value="28.6"/></td>
+        <td>[mm]</td>
+        <td>seat tube diameter</td>
+        <td>średnica rury podsiodłowej</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_st_extra" value="30"/></td>
+        <td>[mm]</td>
+        <td>seat tube extra length</td>
+        <td>dodatkowa długość rury podsiodłowej</td>
+    </tr>
+    <tr></tr>
+    <tr>
+        <td><input type="text" id="tf_ht_angle" value="73"/></td>
+        <td>[deg/stopnie]</td>
+        <td>head tube angle</td>
+        <td>kąt główki ramy</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_ht_diameter" value="38"/></td>
+        <td>[mm]</td>
+        <td>head tube diameter</td>
+        <td>średnica główki ramy</td>
+    </tr>
+    <tr>
+        <td>
+            <button onclick="ctx.clearRect(0, 0, canvas.width, canvas.height);
+                gather_input();
+                calculate();
+                rysuj();">draw</button>
+        </td>
     </tr>
 </table>
+
+<br>
+
+<pre id="summary"></pre>
 
 <br>
 
