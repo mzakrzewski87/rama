@@ -328,12 +328,21 @@ var dropout = {
     ss_offset_x: -12.5, //in
     ss_offset_y: 12.5, //in
     cs_offset_x: 12.5, //in
-    cs_offset_y: 0, //in
+    cs_offset_y: -5, //in
     span: 120, //in
     thickness: 5, //in
     length: 25, //in
     xc: 0, // out
-    yc: 0 //out
+    yc: 0, //out
+    draw: function() {
+        draw_pipe(this.xc, this.yc, this.length, 0, 10, "#000000");
+        
+        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.ss_offset_y, "#000000");
+        draw_line_scaled(this.xc, this.yc+this.ss_offset_y, this.xc-this.ss_offset_x, this.yc+this.ss_offset_y, "#000000");
+        
+        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.cs_offset_y, "#000000");
+        draw_line_scaled(this.xc, this.yc+this.cs_offset_y, this.xc-this.cs_offset_x, this.yc+this.cs_offset_y, "#000000");
+    }
 };
 
 /******************************************************************************/
@@ -689,6 +698,7 @@ function rysuj()
     fork.draw();
     f_wheel.draw();
     r_wheel.draw();
+    dropout.draw();
 
     //--------------------------------------------------------------------------
     // chainstay drawing
