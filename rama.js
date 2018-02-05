@@ -89,18 +89,18 @@ var ht = {
 
 var hs = {
         angle: 0, 
-        th: 11.3, // top height
-        td: 48, // top diameter
-        xt: 0, // x top
-        xtt: 0, // x top top
-        yt: 0, // y top
-        ytt: 0, // y top top
-        bh: 11.3, // bottom height
-        bd: 48, // botton diameter
-        xb: 0, // x bottom
-        xbb: 0, // x bottom bottom
-        yb: 0, // y bottom
-        ybb: 0, // y bottom bottom
+        th: 11.3, // in; top height
+        td: 48, // in; top diameter
+        xt: 0, // out; x top
+        xtt: 0, // out; x top top
+        yt: 0, // out; y top
+        ytt: 0, // out; y top top
+        bh: 11.3, // in; bottom height
+        bd: 48, // in; botton diameter
+        xb: 0, // out; x bottom
+        xbb: 0, // out; x bottom bottom
+        yb: 0, // out; y bottom
+        ybb: 0, // out; y bottom bottom
         color: "#000000",
         
         draw: function() {
@@ -179,7 +179,6 @@ var bb = {
 /******************************************************************************/
 
 var cs = {
-    offset: 400, //in
     diameter:18, //in
     bb_z_offset: 17, //in
     angle: 0, //out
@@ -231,11 +230,11 @@ var ss = {
 
 var dt = {
     angle: 0, //out
-    diameter: 28,
-    xcb: 0,
-    ycb: 0,
-    xct: 0,
-    yct: 0,
+    diameter: 28, // in
+    xcb: 0, // out
+    ycb: 0, // out
+    xct: 0, // out
+    yct: 0, // out
     length: 0, //out
     color: "#000066",
         
@@ -255,8 +254,8 @@ var fork = {
     length: 0, // out
     xct: 0, //out
     yct: 0, //out
-    xcb: 0,
-    ycb: 0,
+    xcb: 0, // out
+    ycb: 0, // out
     color: "aa0000",
         
     draw: function() {
@@ -279,8 +278,8 @@ var cranks = {
     crank_z_external: 56, //in
     xc: 0, //out
     yc: 0, //out
-    xce: 0,
-    yce: 0,
+    xce: 0, // out
+    yce: 0, // out
     color: "#000000",
 
     draw: function() {
@@ -325,16 +324,17 @@ var pedals = {
 /******************************************************************************/
 
 var dropout = {
-        ss_offset_x: -12.5, //in
-        ss_offset_y: 12.5, //in
-        cs_offset_x: 12.5, //in
-        cs_offset_y: 0, //in
-        span: 120, //in
-        thickness: 5, //in
-        length: 25, //in
-        xc: 0, // out
-        yc: 0 //out
-    };
+    offset: 400, // in
+    ss_offset_x: -12.5, //in
+    ss_offset_y: 12.5, //in
+    cs_offset_x: 12.5, //in
+    cs_offset_y: 0, //in
+    span: 120, //in
+    thickness: 5, //in
+    length: 25, //in
+    xc: 0, // out
+    yc: 0 //out
+};
 
 /******************************************************************************/
 /* other variables */
@@ -527,7 +527,7 @@ function calculate()
     summary += "\n";
 
     //dropout
-    dropout.xc = bb.xc + cs.offset;
+    dropout.xc = bb.xc + dropout.offset;
     dropout.yc = 0;
 
     //cs
@@ -642,7 +642,7 @@ function calculate()
     let ht_tt_angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
         tt.xch - tt.xcs, tt.ych - tt.ycs, 0) *180 / Math.PI;
         
-    summary += "head tube - seat tube angle: " + ht_tt_angle.toPrecision(4) + " deg\n"; 
+    summary += "head tube - top tube angle: " + ht_tt_angle.toPrecision(4) + " deg\n"; 
     summary += "\n";  
     
     let ht_dt_angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
@@ -736,10 +736,54 @@ function gather_input()
 {
     st.angle = parseFloat(document.getElementById("tf_st_angle").value);
     st.diameter = parseFloat(document.getElementById("tf_st_diameter").value);
+    st.length = parseFloat(document.getElementById("tf_st_length").value);
     st.extra = parseFloat(document.getElementById("tf_st_extra").value);
 
     ht.angle = parseFloat(document.getElementById("tf_ht_angle").value);
-    ht.diameter = parseFloat(document.getElementById("tf_ht_diameter").value);
+    ht.diameter = parseFloat(document.getElementById("tf_ht_diameter").value);    
+    ht.length = parseFloat(document.getElementById("tf_ht_length").value);
+    ht.extra_top = parseFloat(document.getElementById("tf_ht_extra_top").value);
+    ht.extra_bottom = parseFloat(document.getElementById("tf_ht_extra_bottom").value);
     
+    hs.td = parseFloat(document.getElementById("tf_hs_top_diameter").value);
+    hs.th = parseFloat(document.getElementById("tf_hs_top_height").value);
+    hs.bd = parseFloat(document.getElementById("tf_hs_bottom_diameter").value);
+    hs.bh = parseFloat(document.getElementById("tf_hs_bottom_height").value);
+    
+    
+    f_wheel.diameter = parseFloat(document.getElementById("tf_f_wheel_diameter").value);
+    f_wheel.tyre = parseFloat(document.getElementById("tf_f_wheel_tyre").value);
+    
+    r_wheel.diameter = parseFloat(document.getElementById("tf_r_wheel_diameter").value);
+    r_wheel.tyre = parseFloat(document.getElementById("tf_r_wheel_tyre").value);
 
+    bb.offset = parseFloat(document.getElementById("tf_bb_offset").value);
+    bb.diameter = parseFloat(document.getElementById("tf_bb_diameter").value);
+    bb.width = parseFloat(document.getElementById("tf_bb_width").value);
+    
+    cs.diameter = parseFloat(document.getElementById("tf_cs_diameter").value);
+    cs.bb_z_offset = parseFloat(document.getElementById("tf_cs_bb_z_offset").value);
+    
+    ss.diameter = parseFloat(document.getElementById("tf_ss_diameter").value);
+    ss.st_z_offset = parseFloat(document.getElementById("tf_ss_st_z_offset").value);
+ 
+    dt.diameter = parseFloat(document.getElementById("tf_dt_diameter").value);
+    
+    fork.offset = parseFloat(document.getElementById("tf_fork_offset").value);
+    fork.diameter = parseFloat(document.getElementById("tf_fork_diameter").value);
+    
+    cranks.length = parseFloat(document.getElementById("tf_cranks_length").value);
+    cranks.teeth = parseFloat(document.getElementById("tf_cranks_teeth").value);
+    cranks.chainline = parseFloat(document.getElementById("tf_cranks_chainline").value);
+    
+    pedals.length = parseFloat(document.getElementById("tf_pedal_length").value);  
+    
+    dropout.offset = parseFloat(document.getElementById("tf_dropout_offset").value);  
+    dropout.span = parseFloat(document.getElementById("tf_dropout_span").value);  
+    dropout.thickness = parseFloat(document.getElementById("tf_dropout_thickness").value);  
+    dropout.length = parseFloat(document.getElementById("tf_dropout_length").value);  
+    dropout.ss_offset_x = parseFloat(document.getElementById("tf_dropout_ss_offset_x").value);
+    dropout.ss_offset_y = parseFloat(document.getElementById("tf_dropout_ss_offset_y").value);  
+    dropout.cs_offset_x = parseFloat(document.getElementById("tf_dropout_cs_offset_x").value);  
+    dropout.cs_offset_y = parseFloat(document.getElementById("tf_dropout_cs_offset_y").value);  
 }

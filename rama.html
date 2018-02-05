@@ -26,6 +26,7 @@
 <body>
 
 <table>
+    <tr><td>seat tube / rura podsiodłowa</td></tr>
     <tr>
         <td><input type="text" id="tf_st_angle" value="73"/></td>
         <td>[deg/stopnie]</td>
@@ -39,12 +40,18 @@
         <td>średnica rury podsiodłowej</td>
     </tr>
     <tr>
+        <td><input type="text" id="tf_st_length" value="550"/></td>
+        <td>[mm]</td>
+        <td>seat tube length c-c</td>
+        <td>długość rury podsiodłowej</td>
+    </tr>
+    <tr>
         <td><input type="text" id="tf_st_extra" value="30"/></td>
         <td>[mm]</td>
         <td>seat tube extra length</td>
         <td>dodatkowa długość rury podsiodłowej</td>
     </tr>
-    <tr></tr>
+    <tr><td>head tube / główka ramy</td></tr>
     <tr>
         <td><input type="text" id="tf_ht_angle" value="73"/></td>
         <td>[deg/stopnie]</td>
@@ -57,6 +64,241 @@
         <td>head tube diameter</td>
         <td>średnica główki ramy</td>
     </tr>
+    <tr>
+        <td><input type="text" id="tf_ht_length" value="40"/></td>
+        <td>[mm]</td>
+        <td>head tube length c-c</td>
+        <td>długość główki ramy pomiędzy środkami rur górnej i dolnej</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_ht_extra_top" value="40"/></td>
+        <td>[mm]</td>
+        <td>head tube top extra length</td>
+        <td>długość naddatku główki ramy z góry</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_ht_extra_bottom" value="40"/></td>
+        <td>[mm]</td>
+        <td>head tube bottom extra length</td>
+        <td>długość naddatku główki ramy z dołu</td>
+    </tr>
+    <tr><td>headset / stery</td></tr>
+    <tr>
+        <td><input type="text" id="tf_hs_top_diameter" value="48"/></td>
+        <td>[mm]</td>
+        <td>headset top bearing diameter</td>
+        <td>średnica górnego łożyska sterów</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_hs_top_height" value="12"/></td>
+        <td>[mm]</td>
+        <td>headset top bearing height</td>
+        <td>wysokość górnego łożyska sterów</td>
+    </tr>
+        <tr>
+        <td><input type="text" id="tf_hs_bottom_diameter" value="48"/></td>
+        <td>[mm]</td>
+        <td>headset bottom bearing diameter</td>
+        <td>średnica dolnego łożyska sterów</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_hs_bottom_height" value="12"/></td>
+        <td>[mm]</td>
+        <td>headset bottom bearing height</td>
+        <td>wysokość dolnego łożyska sterów</td>
+    </tr>
+    <tr><td>top tube / rura górna</td></tr>
+    <tr>
+        <td><input type="text" id="tf_tt_angle" value="0"/></td>
+        <td>[deg/stopnie]</td>
+        <td>top tube angle</td>
+        <td>kąt rury górnej</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_tt_diameter" value="25.4"/></td>
+        <td>[mm]</td>
+        <td>top tube diameter</td>
+        <td>średnica rury górnej</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_tt_length" value="560"/></td>
+        <td>[mm]</td>
+        <td>top tube length</td>
+        <td>długość rury górnej</td>
+    </tr>
+    <tr><td>wheels / koła</td></tr>
+    <tr>
+        <td><input type="text" id="tf_f_wheel_diameter" value="622"/></td>
+        <td>[mm]</td>
+        <td>front rim diameter</td>
+        <td>średnica obręczy koła przedniego</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_f_wheel_tyre" value="35"/></td>
+        <td>[mm]</td>
+        <td>front wheel tyre width</td>
+        <td>profil opony koła przedniego</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_r_wheel_diameter" value="622"/></td>
+        <td>[mm]</td>
+        <td>rear rim diameter</td>
+        <td>średnica obręczy koła tylnego</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_r_wheel_tyre" value="35"/></td>
+        <td>[mm]</td>
+        <td>rear wheel tyre width</td>
+        <td>profil opony koła tylnego</td>
+    </tr>
+
+    <tr><td>bottom bracket / suport</td></tr>
+    <tr>
+        <td><input type="text" id="tf_bb_offset" value="60"/></td>
+        <td>[mm]</td>
+        <td>bottom bracket drop</td>
+        <td>obniżenie suportu</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_bb_diameter" value="38"/></td>
+        <td>[mm]</td>
+        <td>bottom bracket diameter</td>
+        <td>średnica mufy suportu</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_bb_width" value="68"/></td>
+        <td>[mm]</td>
+        <td>bottom bracket width</td>
+        <td>szerokość mufy suportu</td>
+    </tr>
+    
+    <tr><td>chainstays / widełki dolne</td></tr>
+    <tr>
+        <td><input type="text" id="tf_cs_diameter" value="20"/></td>
+        <td>[mm]</td>
+        <td>chainstay diameter</td>
+        <td>średnica dolnych widełek</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_cs_bb_z_offset" value="17"/></td>
+        <td>[mm]</td>
+        <td>chainstay bottom bracket z axis offset</td>
+        <td>przesunięcie dolnych widełek w osi z po mufie suportu</td>
+    </tr>
+    
+    <tr><td>seatstays / widełki górne</td></tr>
+    <tr>
+        <td><input type="text" id="tf_ss_diameter" value="12"/></td>
+        <td>[mm]</td>
+        <td>seatstay diameter</td>
+        <td>średnica górnych widełek</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_ss_st_z_offset" value="8"/></td>
+        <td>[mm]</td>
+        <td>seatstay seat tube z axis offset</td>
+        <td>przesunięcie górnych widełek w osi z po rurze podsiodłowej</td>
+    </tr>
+    
+    <tr><td>down tube / rura dolna</td></tr>
+    <tr>
+        <td><input type="text" id="tf_dt_diameter" value="28.6"/></td>
+        <td>[mm]</td>
+        <td>down tube diameter</td>
+        <td>średnica rury dolnej</td>
+    </tr>
+    
+    <tr><td>fork / widelec</td></tr>
+    <tr>
+        <td><input type="text" id="tf_fork_offset" value="40"/></td>
+        <td>[mm]</td>
+        <td>fork offset</td>
+        <td>wyprzedzenie widelca</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_fork_diameter" value="28.6"/></td>
+        <td>[mm]</td>
+        <td>fork diameter</td>
+        <td>średnica widelca</td>
+    </tr>
+    
+    <tr><td>cranks / korby</td></tr>
+    <tr>
+        <td><input type="text" id="tf_cranks_length" value="175"/></td>
+        <td>[mm]</td>
+        <td>cranks length</td>
+        <td>długość korby</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_cranks_teeth" value="50"/></td>
+        <td>[teeth / zębów]</td>
+        <td>teeth number of the chainring</td>
+        <td>ilość zębów zębatki na korbie</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_cranks_chainline" value="41.5"/></td>
+        <td>[mm]</td>
+        <td>chainline</td>
+        <td>przesunięcie linii łańcucha od osi roweru</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_pedal_length" value="95"/></td>
+        <td>[mm]</td>
+        <td>pedal length</td>
+        <td>długość pedałów</td>
+    </tr>
+    
+    <tr><td>dropouts / haki</td></tr>
+    <tr>
+        <td><input type="text" id="tf_dropout_offset" value="400"/></td>
+        <td>[mm]</td>
+        <td>dropout offset from bb</td>
+        <td>odległość haków od suportu</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_dropout_span" value="120"/></td>
+        <td>[mm]</td>
+        <td>span of the dropouts</td>
+        <td>rozstaw haków</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_dropout_thickness" value="5"/></td>
+        <td>[mm]</td>
+        <td>dropout thickness</td>
+        <td>grubość haka</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_dropout_length" value="25"/></td>
+        <td>[mm]</td>
+        <td>dropout length</td>
+        <td>długość haków</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_dropout_ss_offset_x" value="-12.5"/></td>
+        <td>[mm]</td>
+        <td>dropout seatstay tab offset in x axis</td>
+        <td>przesunięcie wypustu górnych widełek względem osi haków w kierunku x</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_dropout_ss_offset_y" value="20"/></td>
+        <td>[mm]</td>
+        <td>dropout seatstay tab offset in y axis</td>
+        <td>przesunięcie języka górnych widełek względem osi haków w kierunku y</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_dropout_cs_offset_x" value="20"/></td>
+        <td>[mm]</td>
+        <td>dropout chainstay tab offset in x axis</td>
+        <td>przesunięcie wypustu dolnych widełek względem osi haków w kierunku x</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="tf_dropout_cs_offset_y" value="0"/></td>
+        <td>[mm]</td>
+        <td>dropout chainstay tab offset in y axis</td>
+        <td>przesunięcie języka dolnych widełek względem osi haków w kierunku y</td>
+    </tr>
+
+    
     <tr>
         <td>
             <button onclick="ctx.clearRect(0, 0, canvas.width, canvas.height);
