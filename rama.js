@@ -451,7 +451,9 @@ function calculate()
     bb.xc = 0;
     bb.yc = - bb.offset;
     
-    summary += "bottom bracket offset: " + bb.offset.toPrecision(4) + " mm\n";
+    summary += "bottom bracket drop / obniżenie suportu: " + bb.offset.toPrecision(4) + " mm\n";
+    summary += "bottom width / szerokość mufy suportu: " + bb.width.toPrecision(4) + " mm\n";
+    summary += "bottom diameter / średnica mufy suportu: " + bb.diameter.toPrecision(4) + " mm\n";
     summary += "\n";
 
     //st
@@ -460,10 +462,10 @@ function calculate()
     st.xct = bb.xc + Math.cos(st.angle*Math.PI/180) * st.length;
     st.yct = bb.yc + Math.sin(st.angle*Math.PI/180) * st.length;
     
-    summary += "seat tube length c-c: " + st.length.toPrecision(4) + " mm\n";
-    summary += "seat tube length c-t: " + (st.length + st.extra).toPrecision(4) + " mm\n";
-    summary += "seat tube angle with ground: " + st.angle.toPrecision(4) + " deg\n";
-    summary += "seat tube diameter: " + st.diameter.toPrecision(4) + " mm\n";
+    summary += "seat tube length c-c / długość rury podsiodłowej środek - środek: " + st.length.toPrecision(4) + " mm\n";
+    summary += "seat tube length c-t / długość rury podsiodłowej środek - koniec: " + (st.length + st.extra).toPrecision(4) + " mm\n";
+    summary += "seat tube angle with ground / kąt rury podsiodłowej względem podłoża: " + st.angle.toPrecision(4) + " deg\n";
+    summary += "seat tube diameter / średnica rury podsiodłowej: " + st.diameter.toPrecision(4) + " mm\n";
     summary += "\n";
     
     //tt
@@ -472,9 +474,9 @@ function calculate()
     tt.xch = tt.xcs + Math.cos(tt.angle*Math.PI/180) * tt.length;
     tt.ych = tt.ycs + Math.sin(tt.angle*Math.PI/180) * tt.length;
     
-    summary += "top tube length c-c: " + tt.length.toPrecision(4) + " mm\n";
-    summary += "top tube angle with ground: " + (tt.angle - 180).toPrecision(4) + " deg\n";
-    summary += "top tube diameter: " + st.diameter.toPrecision(4) + " mm\n";
+    summary += "top tube length c-c / długość rury górnej środek - środek: " + tt.length.toPrecision(4) + " mm\n";
+    summary += "top tube angle with ground / kąt rury górnej względem podłoża: " + (tt.angle - 180).toPrecision(4) + " deg\n";
+    summary += "top tube diameter / średnica rury górnej: " + st.diameter.toPrecision(4) + " mm\n";
     summary += "\n";
 
     //ht
@@ -488,10 +490,12 @@ function calculate()
     ht.xcll = ht.xcl - Math.cos(ht.angle*Math.PI/180) * ht.extra_bottom;
     ht.ycll = ht.ycl - Math.sin(ht.angle*Math.PI/180) * ht.extra_bottom;
     
-    summary += "head tube length c-c: " + ht.length.toPrecision(4) + " mm\n";
-    summary += "head tube length total: " + (ht.length + ht.extra_top + ht.extra_bottom).toPrecision(4) + " mm\n";
-    summary += "head tube angle with ground: " + ht.angle.toPrecision(4) + " deg\n";
-    summary += "head tube diameter: " + ht.diameter.toPrecision(4) + " mm\n";
+    summary += "head tube length c-c / długość główki ramy środek - środek: " + ht.length.toPrecision(4) + " mm\n";
+    summary += "head tube length total / długość całkowita główki ramy: " + (ht.length + ht.extra_top + ht.extra_bottom).toPrecision(4) + " mm\n";
+    summary += "head tube extra length top / długość górnego naddatku główki ramy: " + ht.extra_top.toPrecision(4) + " mm\n";
+    summary += "head tube extra length bottom / długość dolnego naddatku główki ramy: " + ht.extra_bottom.toPrecision(4) + " mm\n";
+    summary += "head tube angle with ground / kąt główki ramy względem podłoża: " + ht.angle.toPrecision(4) + " deg\n";
+    summary += "head tube diameter / średnica główki ramy: " + ht.diameter.toPrecision(4) + " mm\n";
     summary += "\n";
 
     //hs
@@ -507,10 +511,10 @@ function calculate()
     hs.xbb = hs.xb - Math.cos(hs.angle*Math.PI/180) * hs.bh;
     hs.ybb = hs.yb - Math.sin(hs.angle*Math.PI/180) * hs.bh;
     
-    summary += "headset top height: " + hs.th.toPrecision(4) + " mm\n";
-    summary += "headset top diameter: " + hs.td.toPrecision(4) + " mm\n";
-    summary += "headset bottom height: " + hs.bh.toPrecision(4) + " mm\n";
-    summary += "headset bottom diameter: " + hs.bd.toPrecision(4) + " mm\n";
+    summary += "headset top height / wysokość górnego łożyska sterów: " + hs.th.toPrecision(4) + " mm\n";
+    summary += "headset top diameter / średnica górnego łożyska sterów: " + hs.td.toPrecision(4) + " mm\n";
+    summary += "headset bottom height / wysokość dolnego łożyska sterów: " + hs.bh.toPrecision(4) + " mm\n";
+    summary += "headset bottom diameter / średnica dolnego łożyska sterów: " + hs.bd.toPrecision(4) + " mm\n";
     summary += "\n";
 
     //dt
@@ -521,14 +525,23 @@ function calculate()
     dt.angle = angle_from_line(dt.xct, dt.yct, dt.xcb, dt.ycb);
     dt.length = length_from_line(dt.xct, dt.yct, dt.xcb, dt.ycb);
 
-    summary += "down tube length c-c: " + dt.length.toPrecision(4) + " mm\n";
-    summary += "down tube angle with ground: " + (dt.angle).toPrecision(4) + " deg\n";
-    summary += "down tube diameter: " + dt.diameter.toPrecision(4) + " mm\n";
+    summary += "down tube length c-c / długość rury dolnej środek-środek: " + dt.length.toPrecision(4) + " mm\n";
+    summary += "down tube angle with ground / kąt rury dolnej względem podłoża: " + (dt.angle).toPrecision(4) + " deg\n";
+    summary += "down tube diameter / średnica rury dolnej: " + dt.diameter.toPrecision(4) + " mm\n";
     summary += "\n";
 
     //dropout
     dropout.xc = bb.xc + dropout.offset;
     dropout.yc = 0;
+    
+    summary += "dropout offset to bottom bracket / przesunięcie haków od suportu: " + dropout.offset.toPrecision(4) + " mm\n";
+    summary += "dropout span / rozstaw haków: " + dropout.span.toPrecision(4) + " mm\n";
+    summary += "dropout thickness / grubość haków: " + dropout.thickness.toPrecision(4) + " mm\n";
+    summary += "dropout length / długość haków: " + dropout.length.toPrecision(4) + " mm\n";
+    summary += "dropout seatstay offset x / przesunięcie górnych widełek na haku x: " + dropout.ss_offset_x.toPrecision(4) + " mm\n";
+    summary += "dropout seatstay offset y / przesunięcie górnych widełek na haku y: " + dropout.ss_offset_y.toPrecision(4) + " mm\n";
+    summary += "dropout chainstay offset x / przesunięcie dolnych widełek na haku x: " + dropout.cs_offset_x.toPrecision(4) + " mm\n";
+    summary += "dropout chainstay offset y / przesunięcie dolnych widełek na haku y: " + dropout.cs_offset_y.toPrecision(4) + " mm\n";
 
     //cs
     cs.xcd = dropout.xc - dropout.cs_offset_x;
@@ -548,10 +561,10 @@ function calculate()
     
     cs.angle_to_dropout = 90 - cs.angle_to_bb;
     
-    summary += "chainstay real length: " + cs.length_total.toPrecision(4) + " mm\n";
-    summary += "chainstay angle to bottom bracket: " + cs.angle_to_bb.toPrecision(4) + " deg\n";
-    summary += "chainstay angle to dropout plane: " + cs.angle_to_dropout.toPrecision(4) + " deg\n";
-    summary += "chainstay angle to ground in projection to dropout plane: " + cs.angle.toPrecision(4) + " deg\n";
+    summary += "chainstay real length / rzeczywista długość dolnych widełek: " + cs.length_total.toPrecision(4) + " mm\n";
+    summary += "chainstay angle to bottom bracket / kąt pomiędzy dolnymi widełkami a suportem: " + cs.angle_to_bb.toPrecision(4) + " deg\n";
+    summary += "chainstay angle to dropout plane / kąt pomiędzy dolnymi widełkami a płaszczyzną haków: " + cs.angle_to_dropout.toPrecision(4) + " deg\n";
+    summary += "chainstay angle to ground in projection to dropout plane / kąt pomiędzy dolnymi widełkami w rzucie na płaszczyznę haków a podłożem: " + cs.angle.toPrecision(4) + " deg\n";
     summary += "\n";
 
     //ss
@@ -577,10 +590,10 @@ function calculate()
     /* calculated above was actually angle to axis perpendicular to dropout plane */
     ss.angle_to_dropout = ss.angle_to_dropout - 90;
     
-    summary += "seatstay real length: " + ss.length_total.toPrecision(4) + " mm\n";
-    summary += "seatstay angle to ground in projection to dropout plane: " + (180 - ss.angle).toPrecision(4) + " deg\n";
-    summary += "seatstay angle to seat tube: " + ss.angle_to_st.toPrecision(4) + " deg\n";
-    summary += "seatstay angle to dropout plane: " + ss.angle_to_dropout.toPrecision(4) + " deg\n";
+    summary += "seatstay real length / rzeczywista długość górnych widełek: " + ss.length_total.toPrecision(4) + " mm\n";
+    summary += "seatstay angle to ground in projection to dropout plane / kąt pomiędzy górnymi widełkami w rzucie na płaszczyznę haków a podłożem: " + (180 - ss.angle).toPrecision(4) + " deg\n";
+    summary += "seatstay angle to seat tube / kąt pomiędzy górnymi widełkami a rurą podsiodłową: " + ss.angle_to_st.toPrecision(4) + " deg\n";
+    summary += "seatstay angle to dropout plane / kąt pomiędzy górnymi widełkami a płaszczyzną haków: " + ss.angle_to_dropout.toPrecision(4) + " deg\n";
     summary += "\n";
     
     //fork
@@ -591,7 +604,7 @@ function calculate()
     fork.angle = angle_from_line(fork.xcb, fork.ycb, fork.xct, fork.yct);
     fork.length = length_from_line(fork.xcb, fork.ycb, fork.xct, fork.yct);
 
-    summary += "fork length: " + fork.length.toPrecision(4) + " mm\n";
+    summary += "fork length / długość widelca: " + fork.length.toPrecision(4) + " mm\n";
     summary += "\n";
 
     cranks.angle = angle_from_line(bb.xc, bb.yc, fork.xcb, fork.ycb);
@@ -629,32 +642,32 @@ function calculate()
     r_wheel.xc = dropout.xc;
     r_wheel.yc = dropout.yc;
 
-    summary += "wheelbase: " + (r_wheel.xc - f_wheel.xc).toPrecision(4) + " mm\n"; 
+    summary += "wheelbase / rozstaw osi: " + (r_wheel.xc - f_wheel.xc).toPrecision(4) + " mm\n"; 
     summary += "\n";
 
     //zrobic cos z tym
     let ground_level = f_wheel.yc - f_wheel.diameter/2 - f_wheel.tyre;
     let top_tube_top = st.yct + tt.diameter /2;
     
-    summary += "standover height at tt-st joint: " + (top_tube_top - ground_level).toPrecision(4) + " mm\n"; 
+    summary += "standover height at tt-st joint / wysokość przekroku ramy przy złączu rura górna - podsiodłowa: " + (top_tube_top - ground_level).toPrecision(4) + " mm\n"; 
     summary += "\n";    
     
     let ht_tt_angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
         tt.xch - tt.xcs, tt.ych - tt.ycs, 0) *180 / Math.PI;
         
-    summary += "head tube - top tube angle: " + ht_tt_angle.toPrecision(4) + " deg\n"; 
+    summary += "head tube - top tube angle / kąt pomiędzy główką ramy a rurą górną: " + ht_tt_angle.toPrecision(4) + " deg\n"; 
     summary += "\n";  
     
     let ht_dt_angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
         dt.xcb - dt.xct, dt.ycb - dt.yct, 0) *180 / Math.PI;
         
-    summary += "head tube - down tube angle: " + ht_dt_angle.toPrecision(4) + " deg\n"; 
+    summary += "head tube - down tube angle / kąt pomiędzy główką ramy a rurą dolną: " + ht_dt_angle.toPrecision(4) + " deg\n"; 
     summary += "\n";  
     
     let st_dt_angle = angle_from_vectors(st.xcb - st.xct, st.ycb - st.yct, 0,
         dt.xcb - dt.xct, dt.ycb - dt.yct, 0) *180 / Math.PI;
         
-    summary += "seat tube - down tube angle: " + st_dt_angle.toPrecision(4) + " deg\n"; 
+    summary += "seat tube - down tube angle / kąt pomiędzy rurą podsiodłową a dolną: " + st_dt_angle.toPrecision(4) + " deg\n"; 
     summary += "\n";  
     
     
@@ -711,7 +724,6 @@ function rysuj()
         dropout.xc + dropout.length, bb.yc - cs_dwg_offset - dropout.span/2, "#000000");
     draw_line_scaled(dropout.xc + dropout.length, bb.yc - cs_dwg_offset - dropout.span/2,
         dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset - dropout.span/2, "#000000");
-
     
     //chainring
     draw_line_scaled(bb.xc - cranks.radius, bb.yc - cs_dwg_offset + cranks.chainline, bb.xc + cranks.radius, bb.yc - cs_dwg_offset + cranks.chainline);
@@ -725,11 +737,7 @@ function rysuj()
     draw_pipe(bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset + cs.bb_z_offset, cs_length, cs_angle, cs.diameter);
     draw_pipe(bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset - cs.bb_z_offset, cs_length, -cs_angle, cs.diameter);
 
-
-
     draw_line_scaled(bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset + bb.width/2, bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset - bb.width/2);
-
-
 }
 
 function gather_input()
@@ -749,7 +757,6 @@ function gather_input()
     hs.th = parseFloat(document.getElementById("tf_hs_top_height").value);
     hs.bd = parseFloat(document.getElementById("tf_hs_bottom_diameter").value);
     hs.bh = parseFloat(document.getElementById("tf_hs_bottom_height").value);
-    
     
     f_wheel.diameter = parseFloat(document.getElementById("tf_f_wheel_diameter").value);
     f_wheel.tyre = parseFloat(document.getElementById("tf_f_wheel_tyre").value);
