@@ -551,6 +551,7 @@ function calculate()
     summary += "dropout seatstay offset y / przesunięcie górnych widełek na haku y: " + dropout.ss_offset_y.toPrecision(4) + " mm\n";
     summary += "dropout chainstay offset x / przesunięcie dolnych widełek na haku x: " + dropout.cs_offset_x.toPrecision(4) + " mm\n";
     summary += "dropout chainstay offset y / przesunięcie dolnych widełek na haku y: " + dropout.cs_offset_y.toPrecision(4) + " mm\n";
+    summary += "\n";
 
     //cs
     cs.xcd = dropout.xc - dropout.cs_offset_x;
@@ -570,6 +571,8 @@ function calculate()
     
     cs.angle_to_dropout = 90 - cs.angle_to_bb;
     
+    summary += "chainstay diameter / średnica widełek dolnych: " + cs.diameter.toPrecision(4) + " mm\n";
+    summary += "chainstay bb z-axis offset / przesunięcie widełek dolnych po suporcie w osi z: " + cs.bb_z_offset.toPrecision(4) + " mm\n";
     summary += "chainstay real length / rzeczywista długość dolnych widełek: " + cs.length_total.toPrecision(4) + " mm\n";
     summary += "chainstay angle to bottom bracket / kąt pomiędzy dolnymi widełkami a suportem: " + cs.angle_to_bb.toPrecision(4) + " deg\n";
     summary += "chainstay angle to dropout plane / kąt pomiędzy dolnymi widełkami a płaszczyzną haków: " + cs.angle_to_dropout.toPrecision(4) + " deg\n";
@@ -599,6 +602,8 @@ function calculate()
     /* calculated above was actually angle to axis perpendicular to dropout plane */
     ss.angle_to_dropout = ss.angle_to_dropout - 90;
     
+    summary += "seatstay diameter / średnica widełek górnych: " + ss.diameter.toPrecision(4) + " mm\n";
+    summary += "seatstay st z-axis offset / przesunięcie widełek górnych po rurze podsiodłowej w osi z: " + ss.st_z_offset.toPrecision(4) + " mm\n";
     summary += "seatstay real length / rzeczywista długość górnych widełek: " + ss.length_total.toPrecision(4) + " mm\n";
     summary += "seatstay angle to ground in projection to dropout plane / kąt pomiędzy górnymi widełkami w rzucie na płaszczyznę haków a podłożem: " + (180 - ss.angle).toPrecision(4) + " deg\n";
     summary += "seatstay angle to seat tube / kąt pomiędzy górnymi widełkami a rurą podsiodłową: " + ss.angle_to_st.toPrecision(4) + " deg\n";
@@ -614,6 +619,7 @@ function calculate()
     fork.length = length_from_line(fork.xcb, fork.ycb, fork.xct, fork.yct);
 
     summary += "fork length / długość widelca: " + fork.length.toPrecision(4) + " mm\n";
+    summary += "fork offset / wyprzedzenie widelca: " + fork.offset.toPrecision(4) + " mm\n";
     summary += "\n";
 
     cranks.angle = angle_from_line(bb.xc, bb.yc, fork.xcb, fork.ycb);
@@ -623,10 +629,15 @@ function calculate()
     cranks.yce = bb.yc + cranks.length*Math.sin(cranks.angle*Math.PI/180);
     cranks.radius = 12.7 / Math.sin(Math.PI/cranks.teeth) / 2;
 
-    pedals.angle = cranks.angle;
+    summary += "cranks length / długość korb: " + cranks.length.toPrecision(4) + " mm\n";
+    summary += "chainring teeth / ilość zębów zębatki na korbie: " + cranks.teeth.toPrecision(4) + " teeth/zębów\n";
+    summary += "chainline / linia łańcucha: " + cranks.chainline.toPrecision(4) + " mm\n";
+    summary += "pedal length / długość pedałów: " + pedals.length.toPrecision(4) + " mm\n";
 
-    //console.log("pedals.angle ", pedals.angle);
-    
+
+    summary += "\n";
+
+    pedals.angle = cranks.angle;    
     pedals.xc = cranks.xce;// + pedals.length*Math.cos(pedals.angle);
     pedals.yc = cranks.yce;// + pedals.length*Math.sin(pedals.angle);
 
@@ -650,6 +661,12 @@ function calculate()
 
     r_wheel.xc = dropout.xc;
     r_wheel.yc = dropout.yc;
+
+    summary += "front wheel rim diameter / średnica obręczy koła przedniego: " + f_wheel.diameter.toPrecision(4) + " mm\n";
+    summary += "front wheel tyre width / profil opony koła przedniego: " + f_wheel.tyre.toPrecision(4) + " mm\n";
+    summary += "rear wheel rim diameter / średnica obręczy koła tylnego: " + r_wheel.diameter.toPrecision(4) + " mm\n";
+    summary += "rear wheel tyre width / profil opony koła tylnego: " + r_wheel.tyre.toPrecision(4) + " mm\n"; 
+
 
     summary += "wheelbase / rozstaw osi: " + (r_wheel.xc - f_wheel.xc).toPrecision(4) + " mm\n"; 
     summary += "\n";
