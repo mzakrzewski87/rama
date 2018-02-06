@@ -296,14 +296,27 @@
         <td>[mm]</td>
         <td>dropout chainstay tab offset in y axis</td>
         <td>przesunięcie języka dolnych widełek względem osi haków w kierunku y</td>
+    </tr> 
+    <tr><td>printing & drawing / drukowanie i wyświetlanie</td></tr>
+    <tr>
+        <td><input type="text" id="tf_dpi" value="96"/></td>
+        <td>[dots per inch / piksele na cal]</td>
+        <td>dpi</td>
     </tr>
+    <tr>
+        <td><input type="text" id="tf_scale_divisor" value="4"/></td>
+        <td>[ - ]</td>
+        <td>scale divisor</td>
+        <td>dzielnik skali</td>
+    </tr> 
 
-    
     <tr>
         <td>
             <button onclick="ctx.clearRect(0, 0, canvas.width, canvas.height);
                 gather_input();
                 calculate();
+                rysuj();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 rysuj();">draw / rysuj</button>
         </td>
     </tr>
@@ -315,7 +328,7 @@
 
 <br>
 
-<canvas id="myCanvas" width="1800" height="1400" style="border:1px solid #000000;">Ups!</canvas>
+<canvas id="myCanvas" width="800" height="600" style="border:1px solid #000000;">Ups!</canvas>
 
 <p>
 Copyright (C) 2018 Michał Zakrzewski

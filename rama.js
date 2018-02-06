@@ -352,10 +352,18 @@ var dropout = {
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-var x0 = canvas.width / 2 + 100;
-var y0 = canvas.height / 2 - 50;
+var x0 = canvas.width / 2;
+var y0 = canvas.height / 2;
+
+var xmin = 0;
+var xmax = canvas.width;
+
+var ymin = 0; 
+var ymax = canvas.height;
 
 var scale = 1;//0.5;
+
+var pixels_per_mm = 96 / 25.4;
 
 var summary = "";
 
@@ -364,8 +372,31 @@ var summary = "";
 /* functions */
 /******************************************************************************/
 
+function resize_if_necessary(x1, y1, x2, y2)
+{
+    if(x1 < xmin) xmin = x1;
+    if(x1 > xmax) xmax = x1;
+    
+    if(x2 < xmin) xmin = x2;
+    if(x2 > xmax) xmax = x2;
+    
+    if(y1 < ymin) ymin = y1;
+    if(y1 > ymax) ymax = y1;
+    
+    if(y2 < ymin) ymin = y2;
+    if(y2 > ymax) ymax = y2;
+    
+    if(xmin == x1 || xmin == x2 || xmax == x1 || xmax == x2) return true;
+    if(ymin == y1 || ymin == y2 || ymax == y1 || ymax == y2) return true;
+    
+    return false;
+}
+
+
 function draw_line(x1,y1,x2,y2,kolor)
 {
+    if(resize_if_necessary(x1, y1, x2, y2)) return;
+    
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
@@ -377,13 +408,15 @@ function draw_line(x1,y1,x2,y2,kolor)
 function draw_line_scaled(x1,y1,x2,y2,kolor)
 {
     draw_line(
-        x0 + x1*scale, y0 - y1*scale,
-        x0 + x2*scale, y0 - y2*scale,
+        x0 + x1*scale*pixels_per_mm, y0 - y1*scale*pixels_per_mm,
+        x0 + x2*scale*pixels_per_mm, y0 - y2*scale*pixels_per_mm,
         kolor);
 }
 
 function draw_circle(x,y,r,kolor)
 {
+    if(resize_if_necessary(x-r, y-r, x+r, y+r)) return;
+    
     ctx.beginPath();
     ctx.arc(x,y,r,0*Math.PI,2*Math.PI)
     ctx.lineWidth=1;
@@ -394,9 +427,9 @@ function draw_circle(x,y,r,kolor)
 function draw_circle_scaled(x,y,r,kolor)
 {
     draw_circle(
-        x0 + x*scale,
-        y0 - y*scale,
-        r*scale,
+        x0 + x*scale*pixels_per_mm,
+        y0 - y*scale*pixels_per_mm,
+        r*scale*pixels_per_mm,
         kolor);
 }
 
@@ -759,12 +792,25 @@ function rysuj()
     draw_circle_scaled(r_wheel.xc - r_wheel.diameter/2 - r_wheel.tyre/2, bb.yc - cs_dwg_offset, r_wheel.tyre/2, "#000000");
 
     //cs
-    let cs_angle = angle_from_line(bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset + cs.bb_z_offset, dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness/2);
-    let cs_length = length_from_line(bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset + cs.bb_z_offset, dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness/2);
-    draw_pipe(bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset + cs.bb_z_offset, cs_length, cs_angle, cs.diameter);
-    draw_pipe(bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset - cs.bb_z_offset, cs_length, -cs_angle, cs.diameter);
+    let cs_angle = angle_from_line(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness/2);
+    let cs_length = length_from_line(bb.xc /*  bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness/2);
+    draw_pipe(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, cs_length, cs_angle, cs.diameter);
+    draw_pipe(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset - cs.bb_z_offset, cs_length, -cs_angle, cs.diameter);
 
     draw_line_scaled(bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset + bb.width/2, bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset - bb.width/2);
+    
+    //resizing canvas
+    if((xmax - xmin) > canvas.width) canvas.width += xmax - xmin - canvas.width + 20;
+    if((ymax - ymin) > canvas.height) canvas.height += ymax - ymin - canvas.height + 20;
+    
+    x0 -= xmin -10;
+    y0 -= ymin -10;
+    
+    xmin = 0;
+    xmax = canvas.width;
+    
+    ymin = 0;
+    ymax = canvas.height;
 }
 
 function gather_input()
@@ -820,4 +866,12 @@ function gather_input()
     dropout.ss_offset_y = parseFloat(document.getElementById("tf_dropout_ss_offset_y").value);  
     dropout.cs_offset_x = parseFloat(document.getElementById("tf_dropout_cs_offset_x").value);  
     dropout.cs_offset_y = parseFloat(document.getElementById("tf_dropout_cs_offset_y").value);  
+    
+    let scale_divisor = parseFloat(document.getElementById("tf_scale_divisor").value);  
+
+    scale = 1 / scale_divisor;
+    
+    let dpi = parseFloat(document.getElementById("tf_dpi").value);
+    
+    pixels_per_mm = dpi / 25.4;    
 }
