@@ -217,6 +217,7 @@ var ss = {
     yct: 0, //out
     zct: 0, //out
     st_z_offset: 8, //in
+    st_lwise_offset: 0, //in
     color: "#000099",
     
     draw: function() {
@@ -616,9 +617,13 @@ function calculate()
     ss.xcd = dropout.xc - dropout.ss_offset_x;
     ss.ycd = dropout.yc + dropout.ss_offset_y;
     ss.zcd = dropout.span/2 + dropout.thickness/2;
-    ss.xct = st.xct;
-    ss.yct = st.yct;
+    //ss.xct = st.xct;
+    //ss.yct = st.yct;
+    
+    ss.xct = bb.xc + Math.cos(st.angle*Math.PI/180) * (st.length - ss.st_lwise_offset);
+    ss.yct = bb.yc + Math.sin(st.angle*Math.PI/180) * (st.length - ss.st_lwise_offset);
     ss.zct = ss.st_z_offset;
+    
     ss.angle = angle_from_line(ss.xcd, ss.ycd, ss.xct, ss.yct);
     ss.length_xy = length_from_line(ss.xcd, ss.ycd, ss.xct, ss.yct);
     
@@ -846,6 +851,7 @@ function gather_input()
     
     ss.diameter = parseFloat(document.getElementById("tf_ss_diameter").value);
     ss.st_z_offset = parseFloat(document.getElementById("tf_ss_st_z_offset").value);
+    ss.st_lwise_offset = parseFloat(document.getElementById("tf_ss_st_lwise_offset").value);    
  
     dt.diameter = parseFloat(document.getElementById("tf_dt_diameter").value);
     
