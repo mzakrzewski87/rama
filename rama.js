@@ -757,7 +757,7 @@ function rysuj()
     //--------------------------------------------------------------------------
     // chainstay drawing
 
-    let cs_dwg_offset = 300;
+    let cs_dwg_offset = 250;
     
     draw_line_scaled(f_wheel.xc, bb.yc - cs_dwg_offset, r_wheel.xc, bb.yc - cs_dwg_offset);
 
