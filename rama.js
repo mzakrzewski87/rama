@@ -617,8 +617,6 @@ function calculate()
     ss.xcd = dropout.xc - dropout.ss_offset_x;
     ss.ycd = dropout.yc + dropout.ss_offset_y;
     ss.zcd = dropout.span/2 + dropout.thickness/2;
-    //ss.xct = st.xct;
-    //ss.yct = st.yct;
     
     ss.xct = bb.xc + Math.cos(st.angle*Math.PI/180) * (st.length - ss.st_lwise_offset);
     ss.yct = bb.yc + Math.sin(st.angle*Math.PI/180) * (st.length - ss.st_lwise_offset);
@@ -631,17 +629,18 @@ function calculate()
     
     ss.angle_to_st = angle_from_vectors(
         st.xct - st.xcb, st.yct - st.ycb, 0, // seat tube has zero diff in z axis
-        ss.xct - ss.xcd, ss.xcd - ss.ycd, ss.zct - ss.zcd) *180 / Math.PI;
+        ss.xct - ss.xcd, ss.yct - ss.ycd, ss.zct - ss.zcd) *180 / Math.PI;
         
     ss.angle_to_dropout = angle_from_vectors(
         0, 0, 1, // z axis is perpendicular to dropout plane
-        ss.xct - ss.xcd, ss.xcd - ss.ycd, ss.zct - ss.zcd) *180 / Math.PI;
+        ss.xct - ss.xcd, ss.yct - ss.ycd, ss.zct - ss.zcd) *180 / Math.PI;
     
     /* calculated above was actually angle to axis perpendicular to dropout plane */
     ss.angle_to_dropout = ss.angle_to_dropout - 90;
     
     summary += "seatstay diameter / średnica widełek górnych: " + ss.diameter.toPrecision(4) + " mm\n";
     summary += "seatstay st z-axis offset / przesunięcie widełek górnych po rurze podsiodłowej w osi z: " + ss.st_z_offset.toPrecision(4) + " mm\n";
+    summary += "seatstay seat tube lenghtwise offset / przesunięcie górnych widełek wzdłuż rury podsiodłowej: " + ss.st_lwise_offset.toPrecision(4) + " mm\n";
     summary += "seatstay real length / rzeczywista długość górnych widełek: " + ss.length_total.toPrecision(4) + " mm\n";
     summary += "seatstay angle to ground in projection to dropout plane / kąt pomiędzy górnymi widełkami w rzucie na płaszczyznę haków a podłożem: " + (180 - ss.angle).toPrecision(4) + " deg\n";
     summary += "seatstay angle to seat tube / kąt pomiędzy górnymi widełkami a rurą podsiodłową: " + ss.angle_to_st.toPrecision(4) + " deg\n";
@@ -758,7 +757,7 @@ function rysuj()
     //--------------------------------------------------------------------------
     // chainstay drawing
 
-    let cs_dwg_offset = 450;
+    let cs_dwg_offset = 300;
     
     draw_line_scaled(f_wheel.xc, bb.yc - cs_dwg_offset, r_wheel.xc, bb.yc - cs_dwg_offset);
 
@@ -794,16 +793,45 @@ function rysuj()
     draw_line_scaled(bb.xc - cranks.radius, bb.yc - cs_dwg_offset + cranks.chainline, bb.xc + cranks.radius, bb.yc - cs_dwg_offset + cranks.chainline);
 
     // tyre
-    draw_circle_scaled(r_wheel.xc - r_wheel.diameter/2 - r_wheel.tyre/2, bb.yc - cs_dwg_offset, r_wheel.tyre/2, "#000000");
+    //draw_circle_scaled(r_wheel.xc - r_wheel.diameter/2 - r_wheel.tyre/2, bb.yc - cs_dwg_offset, r_wheel.tyre/2, "#FF0000");
 
     //cs
     let cs_angle = angle_from_line(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness/2);
     let cs_length = length_from_line(bb.xc /*  bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness/2);
-    draw_pipe(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, cs_length, cs_angle, cs.diameter);
-    draw_pipe(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset - cs.bb_z_offset, cs_length, -cs_angle, cs.diameter);
+    draw_pipe(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, cs_length, cs_angle, cs.diameter, "#000000");
+    draw_pipe(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset - cs.bb_z_offset, cs_length, -cs_angle, cs.diameter, "#000000");
 
-    draw_line_scaled(bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset + bb.width/2, bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset - bb.width/2);
+    draw_line_scaled(bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset + bb.width/2, bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset - bb.width/2, "#000000");
     
+    // cs real length
+    draw_pipe(cs.xcd, dropout.yc - 2 * cs_dwg_offset + dropout.span/2 + dropout.thickness/2, cs.length_total, 180 + cs.angle_to_dropout, cs.diameter, "#000000");
+    draw_pipe(cs.xcd, dropout.yc - 2 * cs_dwg_offset - dropout.span/2 - dropout.thickness/2, cs.length_total, 180 - cs.angle_to_dropout, cs.diameter, "#000000");
+
+     // tyre
+    draw_circle_scaled(r_wheel.xc - r_wheel.diameter/2 - r_wheel.tyre/2, dropout.yc - 2 * cs_dwg_offset, r_wheel.tyre/2, "#FF0000");
+    
+    //--------------------------------------------------------------------------
+    //seatstay drawing 
+    let ss_dwg_offset = 450;
+    
+    
+
+    draw_line_scaled(ss_dwg_offset + dropout.xc - dropout.span/2 - dropout.thickness/2, dropout.yc,
+        ss_dwg_offset + dropout.xc + dropout.span/2 + dropout.thickness/2, dropout.yc, "#000000");
+        
+    draw_line_scaled(ss_dwg_offset + dropout.xc, dropout.yc,
+        ss_dwg_offset + dropout.xc, dropout.yc + ss.length_total, "#000000");
+    
+    draw_pipe(ss_dwg_offset + dropout.xc - dropout.span/2 - dropout.thickness/2,
+        ss.ycd, ss.length_total, 90 - ss.angle_to_dropout, ss.diameter, "#000000");
+
+    draw_pipe(ss_dwg_offset + dropout.xc + dropout.span/2 + dropout.thickness/2,
+        ss.ycd, ss.length_total, 90 + ss.angle_to_dropout, ss.diameter, "#000000");
+        
+    draw_circle_scaled(ss_dwg_offset + dropout.xc, dropout.yc + r_wheel.diameter/2 + r_wheel.tyre/2, r_wheel.tyre/2, "#FF0000");
+
+    
+    //--------------------------------------------------------------------------
     //resizing canvas
     if((xmax - xmin) > canvas.width) canvas.width += xmax - xmin - canvas.width + 20;
     if((ymax - ymin) > canvas.height) canvas.height += ymax - ymin - canvas.height + 20;
@@ -835,6 +863,10 @@ function gather_input()
     hs.th = parseFloat(document.getElementById("tf_hs_top_height").value);
     hs.bd = parseFloat(document.getElementById("tf_hs_bottom_diameter").value);
     hs.bh = parseFloat(document.getElementById("tf_hs_bottom_height").value);
+    
+    tt.angle = 180 - parseFloat(document.getElementById("tf_tt_angle").value);
+    tt.diameter = parseFloat(document.getElementById("tf_tt_diameter").value);
+    tt.length = parseFloat(document.getElementById("tf_tt_length").value);
     
     f_wheel.diameter = parseFloat(document.getElementById("tf_f_wheel_diameter").value);
     f_wheel.tyre = parseFloat(document.getElementById("tf_f_wheel_tyre").value);
