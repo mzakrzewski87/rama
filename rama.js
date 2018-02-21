@@ -62,18 +62,18 @@ var st = {
 var ht = {
 
     angle: 74.5, //in
-    diameter: 38,
-    length: 45,// in c-c
+    diameter: 38, //in, external diameter
+    length: 45,// in c-c, length between st and dt centers
     extra_top: 40, // in t-c
     extra_bottom: 40, // in b-c
-    xcu: 0,
-    ycu: 0,
-    xcuu: 0,
-    ycuu: 0,
-    xcl: 0,
-    ycl: 0,
-    xcll: 0,
-    ycll: 0,
+    xcu: 0, //out, x center up
+    ycu: 0, //out, y center up
+    xcuu: 0, //out, x upper up
+    ycuu: 0, //out, y upper up
+    xcl: 0, //out, x center low
+    ycl: 0, //out, y center low
+    xcll: 0, //out, x lower low
+    ycll: 0, //out, y lower low
     color: "#000055",
 
     draw: function() {
@@ -104,8 +104,8 @@ var hs = {
         color: "#000000",
         
         draw: function() {
-            draw_pipe(this.xt, this.yt, this.th, ht.angle, this.td);
-            draw_pipe(this.xbb, this.ybb, this.bh, ht.angle, this.bd);
+            draw_pipe(this.xt, this.yt, this.th, ht.angle, this.td, this.color);
+            draw_pipe(this.xbb, this.ybb, this.bh, ht.angle, this.bd, this.color);
         }
     };   
 
@@ -116,7 +116,7 @@ var hs = {
 var tt = {
 
     angle: 180, //in
-    diameter: 25,
+    diameter: 25, //in
     length: 560,//560 //in
     xcs: 0, //out
     ycs: 0, //out
@@ -125,7 +125,7 @@ var tt = {
     color: "#0000ee",
 
     draw: function() {
-        draw_pipe(this.xcs, this.ycs, tt.length, tt.angle, tt.diameter);
+        draw_pipe(this.xcs, this.ycs, tt.length, tt.angle, tt.diameter, this.color);
     }
 };
 /******************************************************************************/
@@ -140,8 +140,8 @@ var f_wheel = {
     
     draw: function() {
         draw_circle_scaled(this.xc, this.yc, this.diameter/2, "#ff0000");
-        draw_circle_scaled(this.xc, this.yc, this.diameter/2 + this.tyre,"#ff0000");
-        draw_circle_scaled(this.xc, this.yc, 5,"#000000");
+        draw_circle_scaled(this.xc, this.yc, this.diameter/2 + this.tyre, "#ff0000");
+        draw_circle_scaled(this.xc, this.yc, 5, "#000000");
     }
 };
 /******************************************************************************/
@@ -162,7 +162,7 @@ var r_wheel = {
 
 var bb = {
 
-    offset: 60, //in // bb drop
+    offset: 60, //in, bb drop
     diameter: 38, //in
     width: 68, //in
     xc: 0, //out
@@ -180,22 +180,22 @@ var bb = {
 
 var cs = {
     diameter:18, //in
-    bb_z_offset: 17, //in
-    angle: 0, //out
+    bb_z_offset: 17, //in, offset of cs center from bb center line
+    angle: 0, //out, angle on the main drawing
     angle_to_bb: 0, //out
     angle_to_dropout: 0, //out
-    length_xy: 0, //out
-    length_total: 0, //out
-    xcd: 0, //out
-    ycd: 0, //out
-    zcd: 0, //out
-    xcb: 0,
-    ycb: 0,
-    zcb: 0, 
+    length_xy: 0, //out, length on the main drawing
+    length_total: 0, //out, real length
+    xcd: 0, //out, x of center on dropout
+    ycd: 0, //out, y of center on dropout
+    zcd: 0, //out, z of center on dropout
+    xcb: 0, //out, x of center on bb
+    ycb: 0, //out, y of center on bb
+    zcb: 0, //out, z of center on bb
     color: "#0000ff",
         
     draw: function() {
-        draw_pipe(bb.xc, bb.yc, cs.length_xy, cs.angle, cs.diameter);
+        draw_pipe(this.xcb, this.ycb, this.length_xy, this.angle, this.diameter, this.color);
     }
 };
 
@@ -205,10 +205,10 @@ var cs = {
 
 var ss = {
     diameter: 12, //in
-    angle: 0, //out
-    angle_to_st: 0, //out
-    angle_to_dropout: 0, //out
-    length_xy: 0, //out, length of projection onto xy plane
+    angle: 0, //out, angle on main drawing
+    angle_to_st: 0, //out, real angle with st
+    angle_to_dropout: 0, //out, real angle with dropout plane
+    length_xy: 0, //out, length of projection onto xy plane, so main drawing
     length_total: 0, //out, real length
     xcd: 0, //out
     ycd: 0, //out
@@ -216,8 +216,8 @@ var ss = {
     xct: 0, //out
     yct: 0, //out
     zct: 0, //out
-    st_z_offset: 8, //in
-    st_lwise_offset: 0, //in
+    st_z_offset: 8, //in, offset from center of st in z (horizontal) axis
+    st_lwise_offset: 0, //in, lengthwise offset from st-tt joint in bb direction 
     color: "#000099",
     
     draw: function() {
@@ -232,15 +232,16 @@ var ss = {
 var dt = {
     angle: 0, //out
     diameter: 28, // in
-    xcb: 0, // out
-    ycb: 0, // out
-    xct: 0, // out
-    yct: 0, // out
-    length: 0, //out
+    xcb: 0, // out, x of center on bb
+    ycb: 0, // out, y of center on bb
+    xct: 0, // out, x of center on ht
+    yct: 0, // out, y of center on ht
+    length: 0, //out, real length
+    // z is zero for this tube
     color: "#000066",
         
     draw: function() {
-        draw_pipe(this.xct, this.yct, this.length, -this.angle, this.diameter);
+        draw_pipe(this.xct, this.yct, this.length, - this.angle, this.diameter, this.color);
     }
 };
 
@@ -260,7 +261,7 @@ var fork = {
     color: "aa0000",
         
     draw: function() {
-        draw_pipe(this.xcb, this.ycb, this.length, this.angle, this.diameter);
+        draw_pipe(this.xcb, this.ycb, this.length, this.angle, this.diameter, this.color);
     }
 };
 
@@ -275,12 +276,12 @@ var cranks = {
     teeth: 50, //in
     radius: 0, //out
     chainline: 41.5, //in
-    crank_z_internal: 46, //in
-    crank_z_external: 56, //in
-    xc: 0, //out
-    yc: 0, //out
-    xce: 0, // out
-    yce: 0, // out
+    crank_z_internal: 46, //in, not used yet
+    crank_z_external: 56, //in, not used yet
+    xc: 0, //out, x of the center of the crank
+    yc: 0, //out, y of the center of the crank
+    xce: 0, // out, x of the end of the crank
+    yce: 0, // out, y of the end of the crank
     color: "#000000",
 
     draw: function() {
@@ -297,8 +298,8 @@ var pedals = {
 
     length: 95, //in
     angle: 0, //out
-    z_internal: 82, //in
-    z_external: 162, //in
+    z_internal: 82, //in, not used yet
+    z_external: 162, //in, not used yet
     xc: 0, //out
     yc: 0, //out
     color: "#00aa00",
@@ -311,13 +312,6 @@ var pedals = {
             this.angle,
             20,
             this.color);
-
-        //draw_line_scaled(
-        //this.xc - this.length/2*Math.cos(this.angle*Math.PI/180),
-        //this.yc - this.length/2*Math.sin(this.angle*Math.PI/180),
-        //this.xc + this.length/2*Math.cos(this.angle*Math.PI/180),
-        //this.yc + this.length/2*Math.sin(this.angle*Math.PI/180),
-        //this.color);
     }
 };
 /******************************************************************************/
@@ -335,14 +329,15 @@ var dropout = {
     length: 25, //in
     xc: 0, // out
     yc: 0, //out
+    color: "#000000", //in
     draw: function() {
-        draw_pipe(this.xc, this.yc, this.length, 0, 10, "#000000");
+        draw_pipe(this.xc, this.yc, this.length, 0, 10, this.color);
         
-        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.ss_offset_y, "#000000");
-        draw_line_scaled(this.xc, this.yc+this.ss_offset_y, this.xc-this.ss_offset_x, this.yc+this.ss_offset_y, "#000000");
+        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.ss_offset_y, this.color);
+        draw_line_scaled(this.xc, this.yc+this.ss_offset_y, this.xc-this.ss_offset_x, this.yc+this.ss_offset_y, this.color);
         
-        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.cs_offset_y, "#000000");
-        draw_line_scaled(this.xc, this.yc+this.cs_offset_y, this.xc-this.cs_offset_x, this.yc+this.cs_offset_y, "#000000");
+        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.cs_offset_y, this.color);
+        draw_line_scaled(this.xc, this.yc+this.cs_offset_y, this.xc-this.cs_offset_x, this.yc+this.cs_offset_y, this.color);
     }
 };
 
@@ -362,7 +357,7 @@ var xmax = canvas.width;
 var ymin = 0; 
 var ymax = canvas.height;
 
-var scale = 1;//0.5;
+var scale = 1;
 
 var pixels_per_mm = 96 / 25.4;
 
@@ -403,7 +398,7 @@ function draw_line(x1,y1,x2,y2,kolor)
     ctx.lineTo(x2, y2);
     ctx.lineWidth=1;
     ctx.strokeStyle=kolor;
-    ctx.stroke();	
+    ctx.stroke();
 }
 
 function draw_line_scaled(x1,y1,x2,y2,kolor)
@@ -434,7 +429,7 @@ function draw_circle_scaled(x,y,r,kolor)
         kolor);
 }
 
-function draw_pipe(x1,y1, length, angle, diameter, color)
+function draw_pipe(x1, y1, length, angle, diameter, color)
 {
     let dx = Math.cos((angle + 90)*Math.PI/180)*diameter/2;
     let dy = Math.sin((angle + 90)*Math.PI/180)*diameter/2;
@@ -484,7 +479,6 @@ function angle_from_vectors(dx1, dy1, dz1, dx2, dy2, dz2)
     
     return result; 
 }
-
 
 function calculate()
 {
@@ -565,8 +559,10 @@ function calculate()
     dt.ycb = bb.yc;
     dt.xct = ht.xcl;
     dt.yct = ht.ycl;
-    dt.angle = angle_from_line(dt.xct, dt.yct, dt.xcb, dt.ycb);
-    dt.length = length_from_line(dt.xct, dt.yct, dt.xcb, dt.ycb);
+    dt.angle = angle_from_line(dt.xct, dt.yct,
+        dt.xcb, dt.ycb);
+    dt.length = length_from_line(dt.xct, dt.yct,
+        dt.xcb, dt.ycb);
 
     summary += "down tube length c-c / długość rury dolnej środek-środek: " + dt.length.toPrecision(4) + " mm\n";
     summary += "down tube angle with ground / kąt rury dolnej względem podłoża: " + (dt.angle).toPrecision(4) + " deg\n";
