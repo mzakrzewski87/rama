@@ -342,6 +342,20 @@ var dropout = {
 };
 
 /******************************************************************************/
+/* cs & ss cross-beams / poprzeczki widełek */
+/******************************************************************************/
+
+var cb_cs = {
+    distance: 366, //in
+    diameter: 18, //in
+    
+};
+
+var cb_ss = {
+    distance: 366, //in
+    diameter: 12, //in
+};
+/******************************************************************************/
 /* other variables */
 /******************************************************************************/
 
@@ -803,17 +817,31 @@ function rysuj()
     draw_pipe(cs.xcd, dropout.yc - 2 * cs_dwg_offset + dropout.span/2 + dropout.thickness/2, cs.length_total, 180 + cs.angle_to_dropout, cs.diameter, "#000000");
     draw_pipe(cs.xcd, dropout.yc - 2 * cs_dwg_offset - dropout.span/2 - dropout.thickness/2, cs.length_total, 180 - cs.angle_to_dropout, cs.diameter, "#000000");
 
+    // cs cross-beam
+    draw_pipe(dropout.xc - cb_cs.distance,
+        dropout.yc - 2 * cs_dwg_offset - dropout.span/2 /*- dropout.thickness/2*/,
+        dropout.span, 90,
+        cb_cs.diameter,
+        "#777700");
+
+
      // tyre
     draw_circle_scaled(r_wheel.xc - r_wheel.diameter/2 - r_wheel.tyre/2, dropout.yc - 2 * cs_dwg_offset, r_wheel.tyre/2, "#FF0000");
     
     //--------------------------------------------------------------------------
     //seatstay drawing 
     let ss_dwg_offset = 450;
-    
-    
 
     draw_line_scaled(ss_dwg_offset + dropout.xc - dropout.span/2 - dropout.thickness/2, dropout.yc,
         ss_dwg_offset + dropout.xc + dropout.span/2 + dropout.thickness/2, dropout.yc, "#000000");
+        
+        // cs cross-beam
+    draw_pipe(ss_dwg_offset + dropout.xc - dropout.span/2 - dropout.thickness/2,
+        dropout.yc + cb_ss.distance,
+        dropout.span,
+        0,
+        cb_ss.diameter,
+        "#777700");    
         
     draw_line_scaled(ss_dwg_offset + dropout.xc, dropout.yc,
         ss_dwg_offset + dropout.xc, dropout.yc + ss.length_total, "#000000");
@@ -907,5 +935,11 @@ function gather_input()
     
     let dpi = parseFloat(document.getElementById("tf_dpi").value);
     
-    pixels_per_mm = dpi / 25.4;    
+    pixels_per_mm = dpi / 25.4;
+    
+    cb_cs.distance = parseFloat(document.getElementById("tf_cs_cb_distance").value);
+    cb_cs.diameter = parseFloat(document.getElementById("tf_cs_cb_diameter").value);
+    
+    cb_ss.distance = parseFloat(document.getElementById("tf_ss_cb_distance").value);
+    cb_ss.diameter = parseFloat(document.getElementById("tf_ss_cb_diameter").value);  
 }
