@@ -33,10 +33,44 @@
 
 /******************************************************************************/
 /* frame pieces */
+
+
+/******************************************************************************/
+/* suport / bottom bracket */
+/******************************************************************************/
+var bb = {
+
+    offset: 60, //in, bb drop
+    diameter: 38, //in
+    width: 68, //in
+    xc: 0, //out
+    yc: 0, //out
+    color: "#dd0000",
+
+    /*
+     * dependencies: none
+     */
+    calculate: function() {
+        this.xc = 0;
+        this.yc = - bb.offset;
+    },
+
+    description: function() {
+        desc  = "bottom bracket drop / obniżenie suportu: " + bb.offset.toPrecision(4) + " mm\n";
+        desc += "bottom width / szerokość mufy suportu: " + bb.width.toPrecision(4) + " mm\n";
+        desc += "bottom diameter / średnica mufy suportu: " + bb.diameter.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
+
+    draw: function() {
+        draw_circle_scaled(this.xc, this.yc, this.diameter/2, this.color);
+    }
+};
+
 /******************************************************************************/
 /* podsiodłowa / seat tube*/
 /******************************************************************************/
-
 var st = {
 
     angle: 74.5, //in
@@ -48,7 +82,26 @@ var st = {
     xcb: 0, //out, same as x of bb center
     ycb: 0, //out, same as y of bb center
     color: "#0000aa", //in
-    
+
+    /*
+     * dependencies: bb
+     */
+    calculate: function() {
+        this.xcb = bb.xc;
+        this.ycb = bb.yc;
+        this.xct = bb.xc + Math.cos(st.angle*Math.PI/180) * st.length;
+        this.yct = bb.yc + Math.sin(st.angle*Math.PI/180) * st.length;
+    },
+
+    description: function() {
+        desc  = "seat tube length c-c / długość rury podsiodłowej środek - środek: " + this.length.toPrecision(4) + " mm\n";
+        desc += "seat tube length c-t / długość rury podsiodłowej środek - koniec: " + (this.length + this.extra).toPrecision(4) + " mm\n";
+        desc += "seat tube angle with ground / kąt rury podsiodłowej względem podłoża: " + this.angle.toPrecision(4) + " deg\n";
+        desc += "seat tube diameter / średnica rury podsiodłowej: " + st.diameter.toPrecision(4) + " mm\n"; 
+        desc += "\n";
+        return desc;
+    },
+
     draw: function() {
         draw_pipe(this.xcb, this.ycb, this.length, this.angle, this.diameter, this.color);
         draw_pipe(this.xct, this.yct, this.extra, this.angle, this.diameter, this.color);
@@ -56,9 +109,45 @@ var st = {
 };
 
 /******************************************************************************/
+/* górna / top tube*/
+/******************************************************************************/
+var tt = {
+
+    angle: 180, //in
+    diameter: 25, //in
+    length: 560,//560 //in
+    xcs: 0, //out, x of center of seat tube side
+    ycs: 0, //out, y of center of seat tube side
+    xch: 0, //out, head tube side
+    ych: 0, //out, head tube side
+    color: "#0000ee",
+
+    /*
+     * dependencies: st
+     */
+    calculate: function() {
+        this.xcs = st.xct;
+        this.ycs = st.yct;
+        this.xch = tt.xcs + Math.cos(tt.angle*Math.PI/180) * tt.length;
+        this.ych = tt.ycs + Math.sin(tt.angle*Math.PI/180) * tt.length;
+    },
+
+    description: function() {
+        desc  = "top tube length c-c / długość rury górnej środek - środek: " + tt.length.toPrecision(4) + " mm\n";
+        desc += "top tube angle with ground / kąt rury górnej względem podłoża: " + (tt.angle - 180).toPrecision(4) + " deg\n";
+        desc += "top tube diameter / średnica rury górnej: " + st.diameter.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
+
+    draw: function() {
+        draw_pipe(this.xcs, this.ycs, tt.length, tt.angle, tt.diameter, this.color);
+    }
+};
+
+/******************************************************************************/
 /* główka / headtube */
 /******************************************************************************/
-
 var ht = {
 
     angle: 74.5, //in
@@ -76,6 +165,31 @@ var ht = {
     ycll: 0, //out, y lower low
     color: "#000055",
 
+    /*
+     * dependencies: tt
+     */
+    calculate: function() {
+        this.xcu = tt.xch;
+        this.ycu = tt.ych;
+        this.xcuu = this.xcu + Math.cos(this.angle*Math.PI/180) * this.extra_top;
+        this.ycuu = this.ycu + Math.sin(this.angle*Math.PI/180) * this.extra_top;
+        this.xcl = this.xcu - Math.cos(this.angle*Math.PI/180) * this.length;
+        this.ycl = this.ycu - Math.sin(this.angle*Math.PI/180) * this.length;
+        this.xcll = this.xcl - Math.cos(this.angle*Math.PI/180) * this.extra_bottom;
+        this.ycll = this.ycl - Math.sin(this.angle*Math.PI/180) * this.extra_bottom;
+    },
+
+    description: function() {
+        desc  = "head tube length c-c / długość główki ramy środek - środek: " + ht.length.toPrecision(4) + " mm\n";
+        desc += "head tube length total / długość całkowita główki ramy: " + (ht.length + ht.extra_top + ht.extra_bottom).toPrecision(4) + " mm\n";
+        desc += "head tube extra length top / długość górnego naddatku główki ramy: " + ht.extra_top.toPrecision(4) + " mm\n";
+        desc += "head tube extra length bottom / długość dolnego naddatku główki ramy: " + ht.extra_bottom.toPrecision(4) + " mm\n";
+        desc += "head tube angle with ground / kąt główki ramy względem podłoża: " + ht.angle.toPrecision(4) + " deg\n";
+        desc += "head tube diameter / średnica główki ramy: " + ht.diameter.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
+
     draw: function() {
         draw_pipe(this.xcl, this.ycl, this.length, this.angle, this.diameter, this.color);
         draw_pipe(this.xcll, this.ycll, this.extra_bottom, this.angle, this.diameter, this.color);
@@ -86,48 +200,92 @@ var ht = {
 /******************************************************************************/
 /* stery / headset*/
 /******************************************************************************/
-
 var hs = {
-        angle: 0, 
-        th: 11.3, // in; top height
-        td: 48, // in; top diameter
-        xt: 0, // out; x top
-        xtt: 0, // out; x top top
-        yt: 0, // out; y top
-        ytt: 0, // out; y top top
-        bh: 11.3, // in; bottom height
-        bd: 48, // in; botton diameter
-        xb: 0, // out; x bottom
-        xbb: 0, // out; x bottom bottom
-        yb: 0, // out; y bottom
-        ybb: 0, // out; y bottom bottom
-        color: "#000000",
-        
-        draw: function() {
-            draw_pipe(this.xt, this.yt, this.th, ht.angle, this.td, this.color);
-            draw_pipe(this.xbb, this.ybb, this.bh, ht.angle, this.bd, this.color);
-        }
-    };   
+    angle: 0, 
+    th: 11.3, // in; top height
+    td: 48, // in; top diameter
+    xt: 0, // out; x top
+    xtt: 0, // out; x top top
+    yt: 0, // out; y top
+    ytt: 0, // out; y top top
+    bh: 11.3, // in; bottom height
+    bd: 48, // in; botton diameter
+    xb: 0, // out; x bottom
+    xbb: 0, // out; x bottom bottom
+    yb: 0, // out; y bottom
+    ybb: 0, // out; y bottom bottom
+    color: "#000000",
 
-/******************************************************************************/
-/* górna / top tube*/
-/******************************************************************************/
+    /*
+     * dependencies: ht
+     */
+    calculate: function() {
+        this.angle = ht.angle;
+        this.xt = ht.xcuu;
+        this.yt = ht.ycuu;
+        this.xtt = this.xt + Math.cos(this.angle*Math.PI/180) * this.th;
+        this.ytt = this.yt + Math.sin(this.angle*Math.PI/180) * this.th;
+        this.xb = ht.xcll;
+        this.yb = ht.ycll;
+        this.xbb = this.xb - Math.cos(this.angle*Math.PI/180) * this.bh;
+        this.ybb = this.yb - Math.sin(this.angle*Math.PI/180) * this.bh;
+    },
 
-var tt = {
-
-    angle: 180, //in
-    diameter: 25, //in
-    length: 560,//560 //in
-    xcs: 0, //out
-    ycs: 0, //out
-    xch: 0, //out
-    ych: 0, //out
-    color: "#0000ee",
+    description: function() {
+        desc  = "headset top height / wysokość górnego łożyska sterów: " + hs.th.toPrecision(4) + " mm\n";
+        desc += "headset top diameter / średnica górnego łożyska sterów: " + hs.td.toPrecision(4) + " mm\n";
+        desc += "headset bottom height / wysokość dolnego łożyska sterów: " + hs.bh.toPrecision(4) + " mm\n";
+        desc += "headset bottom diameter / średnica dolnego łożyska sterów: " + hs.bd.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
 
     draw: function() {
-        draw_pipe(this.xcs, this.ycs, tt.length, tt.angle, tt.diameter, this.color);
+        draw_pipe(this.xt, this.yt, this.th, ht.angle, this.td, this.color);
+        draw_pipe(this.xbb, this.ybb, this.bh, ht.angle, this.bd, this.color);
+    }
+};   
+
+/******************************************************************************/
+/* dolna / down tube */
+/******************************************************************************/
+var dt = {
+    angle: 0, //out
+    diameter: 28, // in
+    xcb: 0, // out, x of center on bb
+    ycb: 0, // out, y of center on bb
+    xct: 0, // out, x of center on ht
+    yct: 0, // out, y of center on ht
+    length: 0, //out, real length
+    // z is zero for this tube
+    color: "#000066",
+
+    /*
+     * dependencies: bb, ht
+     */
+    calculate: function() {
+        this.xcb = bb.xc;
+        this.ycb = bb.yc;
+        this.xct = ht.xcl;
+        this.yct = ht.ycl;
+        this.angle = angle_from_line(this.xct, this.yct,
+            this.xcb, this.ycb);
+        this.length = length_from_line(this.xct, this.yct,
+            this.xcb, this.ycb);
+    },
+
+    description: function() {
+        desc  = "down tube length c-c / długość rury dolnej środek-środek: " + dt.length.toPrecision(4) + " mm\n";
+        desc += "down tube angle with ground / kąt rury dolnej względem podłoża: " + (dt.angle).toPrecision(4) + " deg\n";
+        desc += "down tube diameter / średnica rury dolnej: " + dt.diameter.toPrecision(4) + " mm\n";
+        desc += "\n";
+    },
+
+    draw: function() {
+        draw_pipe(this.xct, this.yct, this.length, - this.angle, this.diameter, this.color);
     }
 };
+
 /******************************************************************************/
 /* koło przednie / front wheel */
 /******************************************************************************/
@@ -156,23 +314,6 @@ var r_wheel = {
         
         draw: f_wheel.draw
     };
-/******************************************************************************/
-/* suport / bottom bracket */
-/******************************************************************************/
-
-var bb = {
-
-    offset: 60, //in, bb drop
-    diameter: 38, //in
-    width: 68, //in
-    xc: 0, //out
-    yc: 0, //out
-    color: "#dd0000",
-
-    draw: function() {
-        draw_circle_scaled(this.xc, this.yc, this.diameter/2, this.color);
-    }
-};
 
 /******************************************************************************/
 /* widełki dolne / chainstays */
@@ -225,25 +366,7 @@ var ss = {
     }
 }
 
-/******************************************************************************/
-/* dolna / down tube */
-/******************************************************************************/
 
-var dt = {
-    angle: 0, //out
-    diameter: 28, // in
-    xcb: 0, // out, x of center on bb
-    ycb: 0, // out, y of center on bb
-    xct: 0, // out, x of center on ht
-    yct: 0, // out, y of center on ht
-    length: 0, //out, real length
-    // z is zero for this tube
-    color: "#000066",
-        
-    draw: function() {
-        draw_pipe(this.xct, this.yct, this.length, - this.angle, this.diameter, this.color);
-    }
-};
 
 /******************************************************************************/
 /* widelec / fork */
@@ -498,90 +621,23 @@ function calculate()
 {
     summary = "";
     
-    //bb
-    bb.xc = 0;
-    bb.yc = - bb.offset;
-    
-    summary += "bottom bracket drop / obniżenie suportu: " + bb.offset.toPrecision(4) + " mm\n";
-    summary += "bottom width / szerokość mufy suportu: " + bb.width.toPrecision(4) + " mm\n";
-    summary += "bottom diameter / średnica mufy suportu: " + bb.diameter.toPrecision(4) + " mm\n";
-    summary += "\n";
+    bb.calculate();
+    summary += bb.description();
 
-    //st
-    st.xcb = bb.xc;
-    st.ycb = bb.yc;
-    st.xct = bb.xc + Math.cos(st.angle*Math.PI/180) * st.length;
-    st.yct = bb.yc + Math.sin(st.angle*Math.PI/180) * st.length;
-    
-    summary += "seat tube length c-c / długość rury podsiodłowej środek - środek: " + st.length.toPrecision(4) + " mm\n";
-    summary += "seat tube length c-t / długość rury podsiodłowej środek - koniec: " + (st.length + st.extra).toPrecision(4) + " mm\n";
-    summary += "seat tube angle with ground / kąt rury podsiodłowej względem podłoża: " + st.angle.toPrecision(4) + " deg\n";
-    summary += "seat tube diameter / średnica rury podsiodłowej: " + st.diameter.toPrecision(4) + " mm\n";
-    summary += "\n";
-    
-    //tt
-    tt.xcs = st.xct;
-    tt.ycs = st.yct;
-    tt.xch = tt.xcs + Math.cos(tt.angle*Math.PI/180) * tt.length;
-    tt.ych = tt.ycs + Math.sin(tt.angle*Math.PI/180) * tt.length;
-    
-    summary += "top tube length c-c / długość rury górnej środek - środek: " + tt.length.toPrecision(4) + " mm\n";
-    summary += "top tube angle with ground / kąt rury górnej względem podłoża: " + (tt.angle - 180).toPrecision(4) + " deg\n";
-    summary += "top tube diameter / średnica rury górnej: " + st.diameter.toPrecision(4) + " mm\n";
-    summary += "\n";
+    st.calculate();
+    summary += st.description();
 
-    //ht
-    ht.xcu = tt.xch;
-    ht.ycu = tt.ych;
-    ht.xcuu = ht.xcu + Math.cos(ht.angle*Math.PI/180) * ht.extra_top;
-    ht.ycuu = ht.ycu + Math.sin(ht.angle*Math.PI/180) * ht.extra_top;
+    tt.calculate();
+    summary += tt.description();
+
+    ht.calculate();
+    summary += ht.description();
     
-    ht.xcl = ht.xcu - Math.cos(ht.angle*Math.PI/180) * ht.length;
-    ht.ycl = ht.ycu - Math.sin(ht.angle*Math.PI/180) * ht.length;
-    ht.xcll = ht.xcl - Math.cos(ht.angle*Math.PI/180) * ht.extra_bottom;
-    ht.ycll = ht.ycl - Math.sin(ht.angle*Math.PI/180) * ht.extra_bottom;
-    
-    summary += "head tube length c-c / długość główki ramy środek - środek: " + ht.length.toPrecision(4) + " mm\n";
-    summary += "head tube length total / długość całkowita główki ramy: " + (ht.length + ht.extra_top + ht.extra_bottom).toPrecision(4) + " mm\n";
-    summary += "head tube extra length top / długość górnego naddatku główki ramy: " + ht.extra_top.toPrecision(4) + " mm\n";
-    summary += "head tube extra length bottom / długość dolnego naddatku główki ramy: " + ht.extra_bottom.toPrecision(4) + " mm\n";
-    summary += "head tube angle with ground / kąt główki ramy względem podłoża: " + ht.angle.toPrecision(4) + " deg\n";
-    summary += "head tube diameter / średnica główki ramy: " + ht.diameter.toPrecision(4) + " mm\n";
-    summary += "\n";
+    hs.calculate();
+    summary += hs.description();
 
-    //hs
-    hs.angle = ht.angle;
-
-    hs.xt = ht.xcuu;
-    hs.yt = ht.ycuu;
-    hs.xtt = hs.xt + Math.cos(hs.angle*Math.PI/180) * hs.th;
-    hs.ytt = hs.yt + Math.sin(hs.angle*Math.PI/180) * hs.th;
-
-    hs.xb = ht.xcll;
-    hs.yb = ht.ycll;
-    hs.xbb = hs.xb - Math.cos(hs.angle*Math.PI/180) * hs.bh;
-    hs.ybb = hs.yb - Math.sin(hs.angle*Math.PI/180) * hs.bh;
-    
-    summary += "headset top height / wysokość górnego łożyska sterów: " + hs.th.toPrecision(4) + " mm\n";
-    summary += "headset top diameter / średnica górnego łożyska sterów: " + hs.td.toPrecision(4) + " mm\n";
-    summary += "headset bottom height / wysokość dolnego łożyska sterów: " + hs.bh.toPrecision(4) + " mm\n";
-    summary += "headset bottom diameter / średnica dolnego łożyska sterów: " + hs.bd.toPrecision(4) + " mm\n";
-    summary += "\n";
-
-    //dt
-    dt.xcb = bb.xc;
-    dt.ycb = bb.yc;
-    dt.xct = ht.xcl;
-    dt.yct = ht.ycl;
-    dt.angle = angle_from_line(dt.xct, dt.yct,
-        dt.xcb, dt.ycb);
-    dt.length = length_from_line(dt.xct, dt.yct,
-        dt.xcb, dt.ycb);
-
-    summary += "down tube length c-c / długość rury dolnej środek-środek: " + dt.length.toPrecision(4) + " mm\n";
-    summary += "down tube angle with ground / kąt rury dolnej względem podłoża: " + (dt.angle).toPrecision(4) + " deg\n";
-    summary += "down tube diameter / średnica rury dolnej: " + dt.diameter.toPrecision(4) + " mm\n";
-    summary += "\n";
+    dt.calculate();
+    summary += dt.description();
 
     //dropout
     dropout.xc = bb.xc + dropout.offset;
@@ -743,7 +799,9 @@ function calculate()
     summary += "seat tube - down tube angle / kąt pomiędzy rurą podsiodłową a dolną: " + st_dt_angle.toPrecision(4) + " deg\n"; 
     summary += "\n";  
     
-    
+    summary += "chainstay cross-beam diameter, distance / średnica, odległość poprzeczki widełek dolnych: " + cb_cs.diameter + ", " + cb_cs.distance + "\n";
+    summary += "seatstay cross-beam diameter, distance / średnica, odległość poprzeczki widełek górnych: " + cb_ss.diameter + ", " + cb_ss.distance + "\n";
+
     document.getElementById("summary").innerHTML = summary;
 }
 
@@ -868,6 +926,24 @@ function rysuj()
     
     ymin = 0;
     ymax = canvas.height;
+}
+
+function rysuj_opis()
+{
+    ODL_X = 15;
+    ODL_Y = 15;
+
+    ctx.font = "10px Arial";
+
+    wiersze = summary.split("\n");
+    y = ODL_Y;
+
+    //for each (var wiersz in wiersze)
+    for (var i = 0; i < wiersze.length; i++)
+    {
+        ctx.fillText(wiersze[i], ODL_X, y);
+        y += ODL_Y;
+    }
 }
 
 function gather_input()
