@@ -57,8 +57,8 @@ var bb = {
 
     description: function() {
         desc  = "bottom bracket drop / obniżenie suportu: " + this.offset.toPrecision(4) + " mm\n";
-        desc += "bottom width / szerokość mufy suportu: " + this.width.toPrecision(4) + " mm\n";
-        desc += "bottom diameter / średnica mufy suportu: " + this.diameter.toPrecision(4) + " mm\n";
+        desc += "bottom bracket width / szerokość mufy suportu: " + this.width.toPrecision(4) + " mm\n";
+        desc += "bottom bracket diameter / średnica mufy suportu: " + this.diameter.toPrecision(4) + " mm\n";
         desc += "\n";
         return desc;
     },
@@ -682,6 +682,7 @@ var tyre_pedal_dist = {
 
     draw: function() {
         draw_line_scaled(this.xf, this.yf, this.xp, this.yp, "#bb00bb");
+        draw_dimension_scaled(this.xf, this.yf, "odl. opona-pedał: " + this.tpd.toPrecision(4), 40, "#008800")
     }
 };
 
@@ -714,6 +715,135 @@ var wheelbase = {
 
     draw: function() {
         draw_line_scaled(this.xf, this.yf, this.xr, this.yr, "#999999");
+    }
+};
+
+/******************************************************************************/
+/* standover / przekrok */
+/******************************************************************************/
+var standover = {
+    xt: 0, //out
+    yt: 0, //out
+    xb: 0, //out
+    yb: 0, //out
+    standover_height: 0, //out
+    top_tube_top_at_bb:0, //out
+
+    /*
+     * dependencies: f_wheel, tt, 
+     */
+    calculate: function() {
+
+        this.top_tube_top_at_bb = (Math.tan(-tt.angle*Math.PI/180) * (tt.xcs - bb.xc)) + tt.ycs + (tt.diameter/2);
+        this.ground_level = f_wheel.yc - (f_wheel.diameter/2) - f_wheel.tyre;
+        this.standover_height = this.top_tube_top_at_bb - this.ground_level;
+
+        this.xt = bb.xc;
+        this.yt = this.top_tube_top_at_bb;
+        this.xb = this.xt;
+        this.yb = this.ground_level;
+    },
+
+    description: function() {
+        desc  = "standover height at bb / wysokość przekroku ramy na wysokości suportu: " + this.standover_height.toPrecision(4) + " mm\n"; 
+        desc += "\n"; 
+        return desc;
+    },
+
+    draw: function() {
+        draw_line_scaled(this.xt, this.yt, this.xb, this.yb, "#008800");
+        draw_dimension_scaled(this.xt, this.yt, "przekrok: " + this.standover_height.toPrecision(4), 40, "#008800")
+        draw_line_scaled(f_wheel.xc, this.ground_level, r_wheel.xc, this.ground_level, "#008800");
+    }
+};
+
+/******************************************************************************/
+/* head tube-top tube angle / kąt główka-górna */
+/******************************************************************************/
+var ht_tt_angle = {
+    xc: 0, //out
+    yc: 0, //out
+    angle: 0, //out
+    /*
+     * dependencies: ht, tt, 
+     */
+    calculate: function() {
+        this.xc = ht.xcu;
+        this.yc = ht.ycu;
+
+        this.angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
+        tt.xch - tt.xcs, tt.ych - tt.ycs, 0) *180 / Math.PI;
+    },
+
+    description: function() {
+        desc  = "head tube-top tube angle / kąt główka-górna: " + this.angle.toPrecision(4) + " deg"; 
+        desc += "\n"; 
+        return desc;
+    },
+
+    draw: function() {
+        draw_arc_scaled(this.xc,this.yc, ht.length/2, -ht.angle*Math.PI/180, (-tt.angle - 180)*Math.PI/180, "#aa0000");
+        draw_dimension_scaled(this.xc, this.yc, "kąt główka-górna: " + this.angle.toPrecision(4) + "st", ht.diameter, "#aa0000")
+    }
+};
+
+/******************************************************************************/
+/* head tube-down tube angle / kąt główka-dolna */
+/******************************************************************************/
+var ht_dt_angle = {
+    xc: 0, //out
+    yc: 0, //out
+    angle: 0, //out
+    /*
+     * dependencies: f_wheel, tt, 
+     */
+    calculate: function() {
+        this.xc = ht.xcl;
+        this.yc = ht.ycl;
+
+        this.angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
+            dt.xcb - dt.xct, dt.ycb - dt.yct, 0) *180 / Math.PI;
+    },
+
+    description: function() {
+        desc  = "head tube - down tube angle / kąt pomiędzy główką ramy a rurą dolną: " + this.angle.toPrecision(4) + " deg\n"; 
+        desc += "\n"; 
+        return desc;
+    },
+
+    draw: function() {
+        draw_arc_scaled(this.xc,this.yc, ht.length/2, (180-ht.angle-this.angle)*Math.PI/180, (180-ht.angle)*Math.PI/180, "#aa0000");
+        draw_dimension_scaled(this.xc, this.yc, "kąt główka-dolna: " + this.angle.toPrecision(4) + "st", ht.diameter, "#aa0000")
+    }
+};
+
+/******************************************************************************/
+/* seat tube-down tube angle / kąt podsiodłowa-dolna */
+/******************************************************************************/
+var st_dt_angle = {
+    xc: 0, //out
+    yc: 0, //out
+    angle: 0, //out
+    /*
+     * dependencies: dt, st, 
+     */
+    calculate: function() {
+        this.xc = st.xcb;
+        this.yc = st.ycb;
+
+        this.angle = angle_from_vectors(st.xcb - st.xct, st.ycb - st.yct, 0,
+            dt.xcb - dt.xct, dt.ycb - dt.yct, 0) *180 / Math.PI;
+    },
+
+    description: function() {
+        desc  = "seat tube - down tube angle / kąt pomiędzy rurą podsiodłową a dolną: " + this.angle.toPrecision(4) + " deg\n"; 
+        desc += "\n"; 
+        return desc;
+    },
+
+    draw: function() {
+        draw_arc_scaled(this.xc,this.yc, bb.diameter, (-st.angle-this.angle)*Math.PI/180, (-st.angle)*Math.PI/180, "#aa0000");
+        draw_dimension_scaled(this.xc, this.yc, "kąt dolna-podsiodłowa: " + this.angle.toPrecision(4) + "st", bb.diameter, "#aa0000")
     }
 };
 
@@ -785,15 +915,30 @@ function draw_line_scaled(x1,y1,x2,y2,kolor)
         kolor);
 }
 
-function draw_circle(x,y,r,kolor)
+function draw_arc(x,y,r,angle_from,angle_to,kolor)
 {
     if(resize_if_necessary(x-r, y-r, x+r, y+r)) return;
-    
+
     ctx.beginPath();
-    ctx.arc(x,y,r,0*Math.PI,2*Math.PI)
+    ctx.arc(x,y,r,angle_from,angle_to)
     ctx.lineWidth=1;
     ctx.strokeStyle=kolor;
     ctx.stroke();
+}
+
+function draw_arc_scaled(x,y,r,angle_from,angle_to,kolor)
+{
+    draw_arc(x0 + x*scale*pixels_per_mm,
+        y0 - y*scale*pixels_per_mm,
+        r*scale*pixels_per_mm,
+        angle_from,
+        angle_to,
+        kolor);
+}
+
+function draw_circle(x,y,r,kolor)
+{
+    draw_arc(x,y,r, 0*Math.PI,2*Math.PI, kolor);
 }
 
 function draw_circle_scaled(x,y,r,kolor)
@@ -820,6 +965,17 @@ function draw_pipe(x1, y1, length, angle, diameter, color)
 
     draw_line_scaled(x1 + dx, y1 + dy, x1 - dx, y1 - dy, color);
     draw_line_scaled(x2 + dx, y2 + dy, x2 - dx, y2 - dy, color);    
+}
+
+function draw_dimension_scaled(x,y, string, line_length, kolor)
+{
+    ODL_X = line_length/1.41;
+    ODL_Y = line_length/1.41;
+
+    draw_line_scaled(x, y, x + ODL_X, y + ODL_Y, kolor);
+
+    ctx.font = "10px Arial";
+    ctx.fillText(string, x0 + (x + ODL_X)*scale*pixels_per_mm, y0 - (y + ODL_Y)*scale*pixels_per_mm);
 }
 
 function angle_from_line(x1,y1,x2,y2)
@@ -856,6 +1012,10 @@ function angle_from_vectors(dx1, dy1, dz1, dx2, dy2, dz2)
     return result; 
 }
 
+/******************************************************************************/
+/* high level functionality */
+/******************************************************************************/
+
 function calculate()
 {
     summary = "";
@@ -876,32 +1036,12 @@ function calculate()
     r_wheel.calculate(); summary += r_wheel.description();
     tyre_pedal_dist.calculate(); summary += tyre_pedal_dist.description();
     wheelbase.calculate(); summary += wheelbase.description();
-
-
-    //zrobic cos z tym
-    let ground_level = f_wheel.yc - f_wheel.diameter/2 - f_wheel.tyre;
-    let top_tube_top = st.yct + tt.diameter /2;
+    standover.calculate(); summary += standover.description();
+    ht_tt_angle.calculate(); summary += ht_tt_angle.description();
+    ht_dt_angle.calculate(); summary += ht_dt_angle.description();
+    st_dt_angle.calculate(); summary += st_dt_angle.description();
     
-    summary += "standover height at tt-st joint / wysokość przekroku ramy przy złączu rura górna - podsiodłowa: " + (top_tube_top - ground_level).toPrecision(4) + " mm\n"; 
-    summary += "\n";    
-    
-    let ht_tt_angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
-        tt.xch - tt.xcs, tt.ych - tt.ycs, 0) *180 / Math.PI;
-        
-    summary += "head tube - top tube angle / kąt pomiędzy główką ramy a rurą górną: " + ht_tt_angle.toPrecision(4) + " deg\n"; 
-    summary += "\n";  
-    
-    let ht_dt_angle = angle_from_vectors(ht.xcl - ht.xcu, ht.ycl - ht.ycu, 0,
-        dt.xcb - dt.xct, dt.ycb - dt.yct, 0) *180 / Math.PI;
-        
-    summary += "head tube - down tube angle / kąt pomiędzy główką ramy a rurą dolną: " + ht_dt_angle.toPrecision(4) + " deg\n"; 
-    summary += "\n";  
-    
-    let st_dt_angle = angle_from_vectors(st.xcb - st.xct, st.ycb - st.yct, 0,
-        dt.xcb - dt.xct, dt.ycb - dt.yct, 0) *180 / Math.PI;
-        
-    summary += "seat tube - down tube angle / kąt pomiędzy rurą podsiodłową a dolną: " + st_dt_angle.toPrecision(4) + " deg\n"; 
-    summary += "\n";  
+ 
     
     summary += "chainstay cross-beam diameter, distance / średnica, odległość poprzeczki widełek dolnych: " + cb_cs.diameter + ", " + cb_cs.distance + "\n";
     summary += "seatstay cross-beam diameter, distance / średnica, odległość poprzeczki widełek górnych: " + cb_ss.diameter + ", " + cb_ss.distance + "\n";
@@ -927,11 +1067,15 @@ function rysuj()
     dropout.draw();
     tyre_pedal_dist.draw();
     wheelbase.draw();
+    standover.draw();
+    ht_tt_angle.draw();
+    ht_dt_angle.draw();
+    st_dt_angle.draw();
 
     //--------------------------------------------------------------------------
     // chainstay drawing
 
-    let cs_dwg_offset = 250;
+    let cs_dwg_offset = 400;
     
     draw_line_scaled(f_wheel.xc, bb.yc - cs_dwg_offset, r_wheel.xc, bb.yc - cs_dwg_offset);
 
@@ -1021,17 +1165,24 @@ function rysuj()
     
     //--------------------------------------------------------------------------
     //resizing canvas
-    if((xmax - xmin) > canvas.width) canvas.width += xmax - xmin - canvas.width + 20;
-    if((ymax - ymin) > canvas.height) canvas.height += ymax - ymin - canvas.height + 20;
-    
-    x0 -= xmin -10;
-    y0 -= ymin -10;
+    if((xmax - xmin) >= canvas.width)
+    {
+        canvas.width = xmax - xmin + 3;
+        if(xmin < 0) x0 -= xmin -1;
+    }
+
+        
+    if((ymax - ymin) >= canvas.height)
+    {
+        canvas.height = ymax - ymin + 3;
+        if(ymin < 0) y0 -= ymin -1;
+    }
     
     xmin = 0;
-    xmax = canvas.width;
+    xmax = canvas.width-1;
     
     ymin = 0;
-    ymax = canvas.height;
+    ymax = canvas.height-1;
 }
 
 function rysuj_opis()
