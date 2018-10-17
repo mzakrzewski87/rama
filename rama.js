@@ -56,9 +56,9 @@ var bb = {
     },
 
     description: function() {
-        desc  = "bottom bracket drop / obniżenie suportu: " + bb.offset.toPrecision(4) + " mm\n";
-        desc += "bottom width / szerokość mufy suportu: " + bb.width.toPrecision(4) + " mm\n";
-        desc += "bottom diameter / średnica mufy suportu: " + bb.diameter.toPrecision(4) + " mm\n";
+        desc  = "bottom bracket drop / obniżenie suportu: " + this.offset.toPrecision(4) + " mm\n";
+        desc += "bottom width / szerokość mufy suportu: " + this.width.toPrecision(4) + " mm\n";
+        desc += "bottom diameter / średnica mufy suportu: " + this.diameter.toPrecision(4) + " mm\n";
         desc += "\n";
         return desc;
     },
@@ -97,7 +97,7 @@ var st = {
         desc  = "seat tube length c-c / długość rury podsiodłowej środek - środek: " + this.length.toPrecision(4) + " mm\n";
         desc += "seat tube length c-t / długość rury podsiodłowej środek - koniec: " + (this.length + this.extra).toPrecision(4) + " mm\n";
         desc += "seat tube angle with ground / kąt rury podsiodłowej względem podłoża: " + this.angle.toPrecision(4) + " deg\n";
-        desc += "seat tube diameter / średnica rury podsiodłowej: " + st.diameter.toPrecision(4) + " mm\n"; 
+        desc += "seat tube diameter / średnica rury podsiodłowej: " + this.diameter.toPrecision(4) + " mm\n"; 
         desc += "\n";
         return desc;
     },
@@ -133,9 +133,9 @@ var tt = {
     },
 
     description: function() {
-        desc  = "top tube length c-c / długość rury górnej środek - środek: " + tt.length.toPrecision(4) + " mm\n";
-        desc += "top tube angle with ground / kąt rury górnej względem podłoża: " + (tt.angle - 180).toPrecision(4) + " deg\n";
-        desc += "top tube diameter / średnica rury górnej: " + st.diameter.toPrecision(4) + " mm\n";
+        desc  = "top tube length c-c / długość rury górnej środek - środek: " + this.length.toPrecision(4) + " mm\n";
+        desc += "top tube angle with ground / kąt rury górnej względem podłoża: " + (this.angle - 180).toPrecision(4) + " deg\n";
+        desc += "top tube diameter / średnica rury górnej: " + this.diameter.toPrecision(4) + " mm\n";
         desc += "\n";
         return desc;
     },
@@ -180,12 +180,12 @@ var ht = {
     },
 
     description: function() {
-        desc  = "head tube length c-c / długość główki ramy środek - środek: " + ht.length.toPrecision(4) + " mm\n";
-        desc += "head tube length total / długość całkowita główki ramy: " + (ht.length + ht.extra_top + ht.extra_bottom).toPrecision(4) + " mm\n";
-        desc += "head tube extra length top / długość górnego naddatku główki ramy: " + ht.extra_top.toPrecision(4) + " mm\n";
-        desc += "head tube extra length bottom / długość dolnego naddatku główki ramy: " + ht.extra_bottom.toPrecision(4) + " mm\n";
-        desc += "head tube angle with ground / kąt główki ramy względem podłoża: " + ht.angle.toPrecision(4) + " deg\n";
-        desc += "head tube diameter / średnica główki ramy: " + ht.diameter.toPrecision(4) + " mm\n";
+        desc  = "head tube length c-c / długość główki ramy środek - środek: " + this.length.toPrecision(4) + " mm\n";
+        desc += "head tube length total / długość całkowita główki ramy: " + (this.length + this.extra_top + this.extra_bottom).toPrecision(4) + " mm\n";
+        desc += "head tube extra length top / długość górnego naddatku główki ramy: " + this.extra_top.toPrecision(4) + " mm\n";
+        desc += "head tube extra length bottom / długość dolnego naddatku główki ramy: " + this.extra_bottom.toPrecision(4) + " mm\n";
+        desc += "head tube angle with ground / kąt główki ramy względem podłoża: " + this.angle.toPrecision(4) + " deg\n";
+        desc += "head tube diameter / średnica główki ramy: " + this.diameter.toPrecision(4) + " mm\n";
         desc += "\n";
         return desc;
     },
@@ -232,10 +232,10 @@ var hs = {
     },
 
     description: function() {
-        desc  = "headset top height / wysokość górnego łożyska sterów: " + hs.th.toPrecision(4) + " mm\n";
-        desc += "headset top diameter / średnica górnego łożyska sterów: " + hs.td.toPrecision(4) + " mm\n";
-        desc += "headset bottom height / wysokość dolnego łożyska sterów: " + hs.bh.toPrecision(4) + " mm\n";
-        desc += "headset bottom diameter / średnica dolnego łożyska sterów: " + hs.bd.toPrecision(4) + " mm\n";
+        desc  = "headset top height / wysokość górnego łożyska sterów: " + this.th.toPrecision(4) + " mm\n";
+        desc += "headset top diameter / średnica górnego łożyska sterów: " + this.td.toPrecision(4) + " mm\n";
+        desc += "headset bottom height / wysokość dolnego łożyska sterów: " + this.bh.toPrecision(4) + " mm\n";
+        desc += "headset bottom diameter / średnica dolnego łożyska sterów: " + this.bd.toPrecision(4) + " mm\n";
         desc += "\n";
         return desc;
     },
@@ -275,9 +275,9 @@ var dt = {
     },
 
     description: function() {
-        desc  = "down tube length c-c / długość rury dolnej środek-środek: " + dt.length.toPrecision(4) + " mm\n";
-        desc += "down tube angle with ground / kąt rury dolnej względem podłoża: " + (dt.angle).toPrecision(4) + " deg\n";
-        desc += "down tube diameter / średnica rury dolnej: " + dt.diameter.toPrecision(4) + " mm\n";
+        desc  = "down tube length c-c / długość rury dolnej środek-środek: " + this.length.toPrecision(4) + " mm\n";
+        desc += "down tube angle with ground / kąt rury dolnej względem podłoża: " + this.angle.toPrecision(4) + " deg\n";
+        desc += "down tube diameter / średnica rury dolnej: " + this.diameter.toPrecision(4) + " mm\n";
         desc += "\n";
     },
 
@@ -287,38 +287,56 @@ var dt = {
 };
 
 /******************************************************************************/
-/* koło przednie / front wheel */
+/* haki / dropouts */
 /******************************************************************************/
-
-var f_wheel = {
-    diameter: 622, //in
-    tyre: 35, //in
-    xc: 0, //out
+var dropout = {
+    offset: 400, // in
+    ss_offset_x: -12.5, //in
+    ss_offset_y: 12.5, //in
+    cs_offset_x: 12.5, //in
+    cs_offset_y: -5, //in
+    span: 120, //in
+    thickness: 5, //in
+    length: 25, //in
+    xc: 0, // out
     yc: 0, //out
-    
+    color: "#000000", //in
+
+    /*
+     * dependencies: bb
+     */
+    calculate: function() {
+        this.xc = bb.xc + this.offset;
+        this.yc = 0;
+    },
+
+    description: function() {
+        desc  = "dropout offset to bottom bracket / przesunięcie haków od suportu: " + this.offset.toPrecision(4) + " mm\n";
+        desc += "dropout span / rozstaw haków: " + this.span.toPrecision(4) + " mm\n";
+        desc += "dropout thickness / grubość haków: " + this.thickness.toPrecision(4) + " mm\n";
+        desc += "dropout length / długość haków: " + this.length.toPrecision(4) + " mm\n";
+        desc += "dropout seatstay offset x / przesunięcie górnych widełek na haku x: " + this.ss_offset_x.toPrecision(4) + " mm\n";
+        desc += "dropout seatstay offset y / przesunięcie górnych widełek na haku y: " + this.ss_offset_y.toPrecision(4) + " mm\n";
+        desc += "dropout chainstay offset x / przesunięcie dolnych widełek na haku x: " + this.cs_offset_x.toPrecision(4) + " mm\n";
+        desc += "dropout chainstay offset y / przesunięcie dolnych widełek na haku y: " + this.cs_offset_y.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
+
     draw: function() {
-        draw_circle_scaled(this.xc, this.yc, this.diameter/2, "#ff0000");
-        draw_circle_scaled(this.xc, this.yc, this.diameter/2 + this.tyre, "#ff0000");
-        draw_circle_scaled(this.xc, this.yc, 5, "#000000");
+        draw_pipe(this.xc, this.yc, this.length, 0, 10, this.color);
+        
+        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.ss_offset_y, this.color);
+        draw_line_scaled(this.xc, this.yc+this.ss_offset_y, this.xc-this.ss_offset_x, this.yc+this.ss_offset_y, this.color);
+        
+        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.cs_offset_y, this.color);
+        draw_line_scaled(this.xc, this.yc+this.cs_offset_y, this.xc-this.cs_offset_x, this.yc+this.cs_offset_y, this.color);
     }
 };
-/******************************************************************************/
-/* koło tylnie / rear wheel */
-/******************************************************************************/
-
-var r_wheel = {
-        diameter: 622, //in
-        tyre: 35, //in
-        xc: 0, //out
-        yc: 0, //out
-        
-        draw: f_wheel.draw
-    };
 
 /******************************************************************************/
 /* widełki dolne / chainstays */
 /******************************************************************************/
-
 var cs = {
     diameter:18, //in
     bb_z_offset: 17, //in, offset of cs center from bb center line
@@ -334,7 +352,36 @@ var cs = {
     ycb: 0, //out, y of center on bb
     zcb: 0, //out, z of center on bb
     color: "#0000ff",
-        
+
+    /*
+     * dependencies: bb, dropout
+     */
+    calculate: function() {
+        this.xcd = dropout.xc - dropout.cs_offset_x;
+        this.ycd = dropout.yc + dropout.cs_offset_y;
+        this.zcd = dropout.span/2 + dropout.thickness/2;
+        this.xcb = bb.xc;
+        this.ycb = bb.yc;
+        this.zcb = this.bb_z_offset;
+        this.angle = angle_from_line(this.xcb, this.ycb, this.xcd, this.ycd);
+        this.length_xy = length_from_line(this.xcb, this.ycb, this.xcd, this.ycd);
+        this.length_total = vector_length(this.xcd - this.xcb, this.ycd - this.ycb, this.zcd - this.zcb);
+        this.angle_to_bb = angle_from_vectors(0, 0, 1, // the bottom bracket axis is purely in z
+            this.xcd - this.xcb, this.ycd - this.ycb, this.zcd - this.zcb) *180 / Math.PI;
+        this.angle_to_dropout = 90 - this.angle_to_bb;
+    },
+
+    description: function() {
+        desc  = "chainstay diameter / średnica widełek dolnych: " + this.diameter.toPrecision(4) + " mm\n";
+        desc += "chainstay bb z-axis offset / przesunięcie widełek dolnych po suporcie w osi z: " + this.bb_z_offset.toPrecision(4) + " mm\n";
+        desc += "chainstay real length / rzeczywista długość dolnych widełek: " + this.length_total.toPrecision(4) + " mm\n";
+        desc += "chainstay angle to bottom bracket / kąt pomiędzy dolnymi widełkami a suportem: " + this.angle_to_bb.toPrecision(4) + " deg\n";
+        desc += "chainstay angle to dropout plane / kąt pomiędzy dolnymi widełkami a płaszczyzną haków: " + this.angle_to_dropout.toPrecision(4) + " deg\n";
+        desc += "chainstay angle to ground in projection to dropout plane / kąt pomiędzy dolnymi widełkami w rzucie na płaszczyznę haków a podłożem: " + this.angle.toPrecision(4) + " deg\n";
+        desc += "\n";
+        return desc;
+    },
+
     draw: function() {
         draw_pipe(this.xcb, this.ycb, this.length_xy, this.angle, this.diameter, this.color);
     }
@@ -343,7 +390,6 @@ var cs = {
 /******************************************************************************/
 /* widełki górne / seatstays */
 /******************************************************************************/
-
 var ss = {
     diameter: 12, //in
     angle: 0, //out, angle on main drawing
@@ -360,18 +406,56 @@ var ss = {
     st_z_offset: 8, //in, offset from center of st in z (horizontal) axis
     st_lwise_offset: 0, //in, lengthwise offset from st-tt joint in bb direction 
     color: "#000099",
+
+    /*
+     * dependencies: bb, st, dropout
+     */
+    calculate: function() {
+        this.xcd = dropout.xc - dropout.ss_offset_x;
+        this.ycd = dropout.yc + dropout.ss_offset_y;
+        this.zcd = dropout.span/2 + dropout.thickness/2;
+    
+        this.xct = bb.xc + Math.cos(st.angle*Math.PI/180) * (st.length - this.st_lwise_offset);
+        this.yct = bb.yc + Math.sin(st.angle*Math.PI/180) * (st.length - this.st_lwise_offset);
+        this.zct = this.st_z_offset;
+    
+        this.angle = angle_from_line(this.xcd, this.ycd, this.xct, this.yct);
+        this.length_xy = length_from_line(this.xcd, this.ycd, this.xct, this.yct);
+    
+        this.length_total = vector_length(this.xct - this.xcd, this.yct - this.ycd, this.zct, this.zcd);
+    
+        this.angle_to_st = angle_from_vectors(
+            st.xct - st.xcb, st.yct - st.ycb, 0, // seat tube has zero diff in z axis
+            this.xct - this.xcd, this.yct - this.ycd, this.zct - this.zcd) *180 / Math.PI;
+        
+        this.angle_to_dropout = angle_from_vectors(
+            0, 0, 1, // z axis is perpendicular to dropout plane
+            this.xct - this.xcd, this.yct - this.ycd, this.zct - this.zcd) *180 / Math.PI;
+    
+        /* calculated above was actually angle to axis perpendicular to dropout plane */
+        this.angle_to_dropout = this.angle_to_dropout - 90;
+    },
+
+    description: function() {
+        desc  = "seatstay diameter / średnica widełek górnych: " + this.diameter.toPrecision(4) + " mm\n";
+        desc += "seatstay st z-axis offset / przesunięcie widełek górnych po rurze podsiodłowej w osi z: " + this.st_z_offset.toPrecision(4) + " mm\n";
+        desc += "seatstay seat tube lenghtwise offset / przesunięcie górnych widełek wzdłuż rury podsiodłowej: " + this.st_lwise_offset.toPrecision(4) + " mm\n";
+        desc += "seatstay real length / rzeczywista długość górnych widełek: " + this.length_total.toPrecision(4) + " mm\n";
+        desc += "seatstay angle to ground in projection to dropout plane / kąt pomiędzy górnymi widełkami w rzucie na płaszczyznę haków a podłożem: " + (180 - this.angle).toPrecision(4) + " deg\n";
+        desc += "seatstay angle to seat tube / kąt pomiędzy górnymi widełkami a rurą podsiodłową: " + this.angle_to_st.toPrecision(4) + " deg\n";
+        desc += "seatstay angle to dropout plane / kąt pomiędzy górnymi widełkami a płaszczyzną haków: " + this.angle_to_dropout.toPrecision(4) + " deg\n";
+        desc += "\n";
+        return desc;
+    },
     
     draw: function() {
         draw_pipe(this.xcd, this.ycd, this.length_xy, this.angle, this.diameter, this.color);
     }
 }
 
-
-
 /******************************************************************************/
 /* widelec / fork */
 /******************************************************************************/
-
 var fork = {
     offset: 50, // in
     diameter: 20, //in
@@ -382,7 +466,26 @@ var fork = {
     xcb: 0, // out
     ycb: 0, // out
     color: "aa0000",
-        
+
+    /*
+     * dependencies: hs, ht,
+     */
+    calculate: function() {
+        this.xct = hs.xbb;
+        this.yct = hs.ybb;
+        this.xcb = hs.xbb - this.offset - 1 / Math.tan(ht.angle*Math.PI/180) * hs.ybb;
+        this.ycb = 0;
+        this.angle = angle_from_line(this.xcb, this.ycb, this.xct, this.yct);
+        this.length = length_from_line(this.xcb, this.ycb, this.xct, this.yct);
+    },
+
+    description: function() {
+        desc  = "fork length / długość widelca: " + this.length.toPrecision(4) + " mm\n";
+        desc += "fork offset / wyprzedzenie widelca: " + this.offset.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
+
     draw: function() {
         draw_pipe(this.xcb, this.ycb, this.length, this.angle, this.diameter, this.color);
     }
@@ -391,7 +494,6 @@ var fork = {
 /******************************************************************************/
 /* korba / crank(set) */
 /******************************************************************************/
-
 var cranks = {
 
     length: 175, // in
@@ -407,6 +509,27 @@ var cranks = {
     yce: 0, // out, y of the end of the crank
     color: "#000000",
 
+    /*
+     * dependencies: bb, fork
+     */
+    calculate: function() {
+        this.angle = angle_from_line(bb.xc, bb.yc, fork.xcb, fork.ycb);
+        this.xc = bb.xc;
+        this.yc = bb.yc;
+        this.xce = bb.xc + this.length*Math.cos(this.angle*Math.PI/180);
+        this.yce = bb.yc + this.length*Math.sin(this.angle*Math.PI/180);
+        /* wzór na promień blatu */ 
+        this.radius = 12.7 / Math.sin(Math.PI/this.teeth) / 2;
+    },
+
+    description: function() {
+        desc  = "cranks length / długość korb: " + this.length.toPrecision(4) + " mm\n";
+        desc += "chainring teeth / ilość zębów zębatki na korbie: " + this.teeth.toPrecision(4) + " teeth/zębów\n";
+        desc += "chainline / linia łańcucha: " + this.chainline.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
+
     draw: function() {
         draw_line_scaled(this.xc, this.yc, this.xce, this.yce, this.color);
         draw_circle_scaled(this.xc, this.yc, this.radius, this.color);
@@ -416,7 +539,6 @@ var cranks = {
 /******************************************************************************/
 /* pedały / pedals */
 /******************************************************************************/
-
 var pedals = {
 
     length: 95, //in
@@ -426,6 +548,21 @@ var pedals = {
     xc: 0, //out
     yc: 0, //out
     color: "#00aa00",
+
+    /*
+     * dependencies: cranks,
+     */
+    calculate: function() {
+        this.angle = cranks.angle;    
+        this.xc = cranks.xce;
+        this.yc = cranks.yce;
+    },
+
+    description: function() {
+        desc  = "pedal length / długość pedałów: " + pedals.length.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
 
     draw: function() {
         
@@ -437,37 +574,69 @@ var pedals = {
             this.color);
     }
 };
-/******************************************************************************/
-/* haki / dropouts */
-/******************************************************************************/
 
-var dropout = {
-    offset: 400, // in
-    ss_offset_x: -12.5, //in
-    ss_offset_y: 12.5, //in
-    cs_offset_x: 12.5, //in
-    cs_offset_y: -5, //in
-    span: 120, //in
-    thickness: 5, //in
-    length: 25, //in
-    xc: 0, // out
+/******************************************************************************/
+/* koło przednie / front wheel */
+/******************************************************************************/
+var f_wheel = {
+    diameter: 622, //in
+    tyre: 35, //in
+    xc: 0, //out
     yc: 0, //out
-    color: "#000000", //in
+
+    /*
+     * dependencies: fork,
+     */
+    calculate: function() {
+        this.xc = fork.xcb;
+        this.yc = fork.ycb;
+    },
+
+    description: function() {
+        desc  = "front wheel rim diameter / średnica obręczy koła przedniego: " + this.diameter.toPrecision(4) + " mm\n";
+        desc += "front wheel tyre width / profil opony koła przedniego: " + this.tyre.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
+
     draw: function() {
-        draw_pipe(this.xc, this.yc, this.length, 0, 10, this.color);
-        
-        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.ss_offset_y, this.color);
-        draw_line_scaled(this.xc, this.yc+this.ss_offset_y, this.xc-this.ss_offset_x, this.yc+this.ss_offset_y, this.color);
-        
-        draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.cs_offset_y, this.color);
-        draw_line_scaled(this.xc, this.yc+this.cs_offset_y, this.xc-this.cs_offset_x, this.yc+this.cs_offset_y, this.color);
+        draw_circle_scaled(this.xc, this.yc, this.diameter/2, "#ff0000");
+        draw_circle_scaled(this.xc, this.yc, this.diameter/2 + this.tyre, "#ff0000");
+        draw_circle_scaled(this.xc, this.yc, 5, "#000000");
     }
+};
+
+/******************************************************************************/
+/* koło tylnie / rear wheel */
+/******************************************************************************/
+var r_wheel = {
+    diameter: 622, //in
+    tyre: 35, //in
+    xc: 0, //out
+    yc: 0, //out
+
+    /*
+     * dependencies: dropout,
+     */
+    calculate: function() {
+        this.xc = dropout.xc;
+        this.yc = dropout.yc;
+    },
+
+    description: function() {
+        desc  = "rear wheel rim diameter / średnica obręczy koła tylnego: " + this.diameter.toPrecision(4) + " mm\n";
+        desc += "rear wheel tyre width / profil opony koła tylnego: " + this.tyre.toPrecision(4) + " mm\n";
+        desc += "\n";
+        return desc;
+    },
+    
+    /* copy from the front */
+    draw: f_wheel.draw
 };
 
 /******************************************************************************/
 /* cs & ss cross-beams / poprzeczki widełek */
 /******************************************************************************/
-
 var cb_cs = {
     distance: 366, //in
     diameter: 18, //in
@@ -478,6 +647,76 @@ var cb_ss = {
     distance: 366, //in
     diameter: 12, //in
 };
+
+
+/******************************************************************************/
+/* other dimensions' drawings / rysunki innych wielkości */
+/******************************************************************************/
+
+/******************************************************************************/
+/* tyre pedal distance / odległość od opony do pedałów */
+/******************************************************************************/
+var tyre_pedal_dist = {
+    xf: 0, //out
+    yf: 0, //out
+    xp: 0, //out
+    yp: 0, //out
+    tpd: 0, //out
+    
+    /*
+     * dependencies: fork, f_wheel, cranks, pedals
+     */
+    calculate: function() {
+        this.xf = fork.xcb + (f_wheel.diameter/2 + f_wheel.tyre)*Math.cos((cranks.angle+180)*Math.PI/180);
+        this.yf = fork.ycb + (f_wheel.diameter/2 + f_wheel.tyre)*Math.sin((cranks.angle+180)*Math.PI/180);
+        this.xp = pedals.xc + pedals.length/2*Math.cos(pedals.angle*Math.PI/180);
+        this.yp = pedals.yc + pedals.length/2*Math.sin(pedals.angle*Math.PI/180);
+        this.tpd = length_from_line(this.xf,this.yf, this.xp,this.yp);
+    },
+
+    description: function() {
+        desc  = "tyre-pedal distance / odległość opony od pedałów: " + this.tpd.toPrecision(4) + " mm\n"; 
+        desc += "\n";
+        return desc;
+    },
+
+    draw: function() {
+        draw_line_scaled(this.xf, this.yf, this.xp, this.yp, "#bb00bb");
+    }
+};
+
+/******************************************************************************/
+/* wheelbase / rozstaw osi */
+/******************************************************************************/
+var wheelbase = {
+    xf: 0, //out
+    yf: 0, //out
+    xr: 0, //out
+    yr: 0, //out
+    wb: 0, //out
+    
+    /*
+     * dependencies: f_wheel, r_wheel
+     */
+    calculate: function() {
+        this.xf = f_wheel.xc;
+        this.yf = f_wheel.yc;
+        this.xr = r_wheel.xc;
+        this.yr = r_wheel.yc;
+        this.wb = this.xr - this.xf;
+    },
+
+    description: function() {
+        desc  = "wheelbase / rozstaw osi: " + this.wb.toPrecision(4) + " mm\n";  
+        desc += "\n";
+        return desc;
+    },
+
+    draw: function() {
+        draw_line_scaled(this.xf, this.yf, this.xr, this.yr, "#999999");
+    }
+};
+
 /******************************************************************************/
 /* other variables */
 /******************************************************************************/
@@ -621,158 +860,23 @@ function calculate()
 {
     summary = "";
     
-    bb.calculate();
-    summary += bb.description();
+    bb.calculate(); summary += bb.description();
+    st.calculate(); summary += st.description();
+    tt.calculate(); summary += tt.description();
+    ht.calculate(); summary += ht.description();
+    hs.calculate(); summary += hs.description();
+    dt.calculate(); summary += dt.description();
+    dropout.calculate(); summary += dropout.description();
+    cs.calculate(); summary += cs.description();
+    ss.calculate(); summary += ss.description();
+    fork.calculate(); summary += fork.description();
+    cranks.calculate(); summary += cranks.description();
+    pedals.calculate(); summary += pedals.description();
+    f_wheel.calculate(); summary += f_wheel.description();
+    r_wheel.calculate(); summary += r_wheel.description();
+    tyre_pedal_dist.calculate(); summary += tyre_pedal_dist.description();
+    wheelbase.calculate(); summary += wheelbase.description();
 
-    st.calculate();
-    summary += st.description();
-
-    tt.calculate();
-    summary += tt.description();
-
-    ht.calculate();
-    summary += ht.description();
-    
-    hs.calculate();
-    summary += hs.description();
-
-    dt.calculate();
-    summary += dt.description();
-
-    //dropout
-    dropout.xc = bb.xc + dropout.offset;
-    dropout.yc = 0;
-    
-    summary += "dropout offset to bottom bracket / przesunięcie haków od suportu: " + dropout.offset.toPrecision(4) + " mm\n";
-    summary += "dropout span / rozstaw haków: " + dropout.span.toPrecision(4) + " mm\n";
-    summary += "dropout thickness / grubość haków: " + dropout.thickness.toPrecision(4) + " mm\n";
-    summary += "dropout length / długość haków: " + dropout.length.toPrecision(4) + " mm\n";
-    summary += "dropout seatstay offset x / przesunięcie górnych widełek na haku x: " + dropout.ss_offset_x.toPrecision(4) + " mm\n";
-    summary += "dropout seatstay offset y / przesunięcie górnych widełek na haku y: " + dropout.ss_offset_y.toPrecision(4) + " mm\n";
-    summary += "dropout chainstay offset x / przesunięcie dolnych widełek na haku x: " + dropout.cs_offset_x.toPrecision(4) + " mm\n";
-    summary += "dropout chainstay offset y / przesunięcie dolnych widełek na haku y: " + dropout.cs_offset_y.toPrecision(4) + " mm\n";
-    summary += "\n";
-
-    //cs
-    cs.xcd = dropout.xc - dropout.cs_offset_x;
-    cs.ycd = dropout.yc + dropout.cs_offset_y;
-    cs.zcd = dropout.span/2 + dropout.thickness/2;
-    cs.xcb = bb.xc;
-    cs.ycb = bb.yc;
-    cs.zcb = cs.bb_z_offset;
-    cs.angle = angle_from_line(cs.xcb, cs.ycb, cs.xcd, cs.ycd);
-    cs.length_xy = length_from_line(cs.xcb, cs.ycb, cs.xcd, cs.ycd);
-    
-    cs.length_total = vector_length(cs.xcd - cs.xcb, cs.ycd - cs.ycb, cs.zcd - cs.zcb);
-    
-    cs.angle_to_bb = angle_from_vectors(
-        0, 0, 1, // the bottom bracket axis is purely in z
-        cs.xcd - cs.xcb, cs.ycd - cs.ycb, cs.zcd - cs.zcb) *180 / Math.PI;
-    
-    cs.angle_to_dropout = 90 - cs.angle_to_bb;
-    
-    summary += "chainstay diameter / średnica widełek dolnych: " + cs.diameter.toPrecision(4) + " mm\n";
-    summary += "chainstay bb z-axis offset / przesunięcie widełek dolnych po suporcie w osi z: " + cs.bb_z_offset.toPrecision(4) + " mm\n";
-    summary += "chainstay real length / rzeczywista długość dolnych widełek: " + cs.length_total.toPrecision(4) + " mm\n";
-    summary += "chainstay angle to bottom bracket / kąt pomiędzy dolnymi widełkami a suportem: " + cs.angle_to_bb.toPrecision(4) + " deg\n";
-    summary += "chainstay angle to dropout plane / kąt pomiędzy dolnymi widełkami a płaszczyzną haków: " + cs.angle_to_dropout.toPrecision(4) + " deg\n";
-    summary += "chainstay angle to ground in projection to dropout plane / kąt pomiędzy dolnymi widełkami w rzucie na płaszczyznę haków a podłożem: " + cs.angle.toPrecision(4) + " deg\n";
-    summary += "\n";
-
-    //ss
-    ss.xcd = dropout.xc - dropout.ss_offset_x;
-    ss.ycd = dropout.yc + dropout.ss_offset_y;
-    ss.zcd = dropout.span/2 + dropout.thickness/2;
-    
-    ss.xct = bb.xc + Math.cos(st.angle*Math.PI/180) * (st.length - ss.st_lwise_offset);
-    ss.yct = bb.yc + Math.sin(st.angle*Math.PI/180) * (st.length - ss.st_lwise_offset);
-    ss.zct = ss.st_z_offset;
-    
-    ss.angle = angle_from_line(ss.xcd, ss.ycd, ss.xct, ss.yct);
-    ss.length_xy = length_from_line(ss.xcd, ss.ycd, ss.xct, ss.yct);
-    
-    ss.length_total = vector_length(ss.xct - ss.xcd, ss.yct - ss.ycd, ss.zct, ss.zcd);
-    
-    ss.angle_to_st = angle_from_vectors(
-        st.xct - st.xcb, st.yct - st.ycb, 0, // seat tube has zero diff in z axis
-        ss.xct - ss.xcd, ss.yct - ss.ycd, ss.zct - ss.zcd) *180 / Math.PI;
-        
-    ss.angle_to_dropout = angle_from_vectors(
-        0, 0, 1, // z axis is perpendicular to dropout plane
-        ss.xct - ss.xcd, ss.yct - ss.ycd, ss.zct - ss.zcd) *180 / Math.PI;
-    
-    /* calculated above was actually angle to axis perpendicular to dropout plane */
-    ss.angle_to_dropout = ss.angle_to_dropout - 90;
-    
-    summary += "seatstay diameter / średnica widełek górnych: " + ss.diameter.toPrecision(4) + " mm\n";
-    summary += "seatstay st z-axis offset / przesunięcie widełek górnych po rurze podsiodłowej w osi z: " + ss.st_z_offset.toPrecision(4) + " mm\n";
-    summary += "seatstay seat tube lenghtwise offset / przesunięcie górnych widełek wzdłuż rury podsiodłowej: " + ss.st_lwise_offset.toPrecision(4) + " mm\n";
-    summary += "seatstay real length / rzeczywista długość górnych widełek: " + ss.length_total.toPrecision(4) + " mm\n";
-    summary += "seatstay angle to ground in projection to dropout plane / kąt pomiędzy górnymi widełkami w rzucie na płaszczyznę haków a podłożem: " + (180 - ss.angle).toPrecision(4) + " deg\n";
-    summary += "seatstay angle to seat tube / kąt pomiędzy górnymi widełkami a rurą podsiodłową: " + ss.angle_to_st.toPrecision(4) + " deg\n";
-    summary += "seatstay angle to dropout plane / kąt pomiędzy górnymi widełkami a płaszczyzną haków: " + ss.angle_to_dropout.toPrecision(4) + " deg\n";
-    summary += "\n";
-    
-    //fork
-    fork.xct = hs.xbb;
-    fork.yct = hs.ybb;
-    fork.xcb = hs.xbb - fork.offset - 1 / Math.tan(ht.angle*Math.PI/180) * hs.ybb;
-    fork.ycb = 0;
-    fork.angle = angle_from_line(fork.xcb, fork.ycb, fork.xct, fork.yct);
-    fork.length = length_from_line(fork.xcb, fork.ycb, fork.xct, fork.yct);
-
-    summary += "fork length / długość widelca: " + fork.length.toPrecision(4) + " mm\n";
-    summary += "fork offset / wyprzedzenie widelca: " + fork.offset.toPrecision(4) + " mm\n";
-    summary += "\n";
-
-    cranks.angle = angle_from_line(bb.xc, bb.yc, fork.xcb, fork.ycb);
-    cranks.xc = bb.xc;
-    cranks.yc = bb.yc;
-    cranks.xce = bb.xc + cranks.length*Math.cos(cranks.angle*Math.PI/180);
-    cranks.yce = bb.yc + cranks.length*Math.sin(cranks.angle*Math.PI/180);
-    cranks.radius = 12.7 / Math.sin(Math.PI/cranks.teeth) / 2;
-
-    summary += "cranks length / długość korb: " + cranks.length.toPrecision(4) + " mm\n";
-    summary += "chainring teeth / ilość zębów zębatki na korbie: " + cranks.teeth.toPrecision(4) + " teeth/zębów\n";
-    summary += "chainline / linia łańcucha: " + cranks.chainline.toPrecision(4) + " mm\n";
-    summary += "pedal length / długość pedałów: " + pedals.length.toPrecision(4) + " mm\n";
-
-
-    summary += "\n";
-
-    pedals.angle = cranks.angle;    
-    pedals.xc = cranks.xce;// + pedals.length*Math.cos(pedals.angle);
-    pedals.yc = cranks.yce;// + pedals.length*Math.sin(pedals.angle);
-
-// do przełożenia gdzie indziej
-    let xtmp = fork.xcb + (f_wheel.diameter/2 + f_wheel.tyre)*Math.cos((cranks.angle+180)*Math.PI/180);
-    let ytmp = fork.ycb + (f_wheel.diameter/2 + f_wheel.tyre)*Math.sin((cranks.angle+180)*Math.PI/180);
-
-    let xtmp2 = pedals.xc + pedals.length/2*Math.cos(pedals.angle*Math.PI/180);
-    let ytmp2 = pedals.yc + pedals.length/2*Math.sin(pedals.angle*Math.PI/180);
-
-    draw_line_scaled(xtmp, ytmp, xtmp2, ytmp2, "#000000");
-
-    //console.log("x tyre y tyre ", xtmp, " ", ytmp);
-    //console.log("x pedal y pedal ", xtmp2, " ", ytmp2);
-    let tyre_pedal_dist = length_from_line(xtmp,ytmp,xtmp2,ytmp2);
-    summary += "tyre-pedal distance: " + tyre_pedal_dist.toPrecision(4) + " mm\n"; 
-    summary += "\n";
-// ~ do przełożenia gdzie indziej
-    f_wheel.xc = fork.xcb;
-    f_wheel.yc = fork.ycb;
-
-    r_wheel.xc = dropout.xc;
-    r_wheel.yc = dropout.yc;
-
-    summary += "front wheel rim diameter / średnica obręczy koła przedniego: " + f_wheel.diameter.toPrecision(4) + " mm\n";
-    summary += "front wheel tyre width / profil opony koła przedniego: " + f_wheel.tyre.toPrecision(4) + " mm\n";
-    summary += "rear wheel rim diameter / średnica obręczy koła tylnego: " + r_wheel.diameter.toPrecision(4) + " mm\n";
-    summary += "rear wheel tyre width / profil opony koła tylnego: " + r_wheel.tyre.toPrecision(4) + " mm\n"; 
-
-
-    summary += "wheelbase / rozstaw osi: " + (r_wheel.xc - f_wheel.xc).toPrecision(4) + " mm\n"; 
-    summary += "\n";
 
     //zrobic cos z tym
     let ground_level = f_wheel.yc - f_wheel.diameter/2 - f_wheel.tyre;
@@ -821,6 +925,8 @@ function rysuj()
     f_wheel.draw();
     r_wheel.draw();
     dropout.draw();
+    tyre_pedal_dist.draw();
+    wheelbase.draw();
 
     //--------------------------------------------------------------------------
     // chainstay drawing
