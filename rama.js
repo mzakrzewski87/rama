@@ -52,7 +52,7 @@ var bb = {
      */
     calculate: function() {
         this.xc = 0;
-        this.yc = - bb.offset;
+        this.yc = - this.offset;
     },
 
     description: function() {
@@ -65,6 +65,21 @@ var bb = {
 
     draw: function() {
         draw_circle_scaled(this.xc, this.yc, this.diameter/2, this.color);
+    },
+
+    draw_cs_dwg: function(cs_dwg_offset) {
+        draw_pipe(this.xc - this.diameter/2,
+        this.yc - cs_dwg_offset,
+        this.diameter,
+        0,
+        this.width,
+        this.color);
+
+        draw_line_scaled(bb.xc,
+            bb.yc - cs_dwg_offset + bb.width/2,
+            bb.xc,
+            bb.yc - cs_dwg_offset - bb.width/2,
+            this.color);
     }
 };
 
@@ -331,6 +346,23 @@ var dropout = {
         
         draw_line_scaled(this.xc, this.yc, this.xc, this.yc+this.cs_offset_y, this.color);
         draw_line_scaled(this.xc, this.yc+this.cs_offset_y, this.xc-this.cs_offset_x, this.yc+this.cs_offset_y, this.color);
+    },
+
+    draw_cs_dwg: function(cs_dwg_offset) {
+
+        draw_pipe(this.xc - this.cs_offset_x,
+            bb.yc - cs_dwg_offset + this.span/2 + this.thickness/2,
+            this.cs_offset_x + this.length,
+            0, //angle
+            this.thickness,
+            this.color);
+
+        draw_pipe(this.xc - this.cs_offset_x,
+            bb.yc - cs_dwg_offset - this.span/2 - this.thickness/2,
+            this.cs_offset_x + this.length,
+            0, //angle
+            this.thickness,
+            this.color);
     }
 };
 
@@ -341,9 +373,11 @@ var cs = {
     diameter:18, //in
     bb_z_offset: 17, //in, offset of cs center from bb center line
     angle: 0, //out, angle on the main drawing
+    angle_xz: 0, //out
     angle_to_bb: 0, //out
     angle_to_dropout: 0, //out
     length_xy: 0, //out, length on the main drawing
+    length_xz: 0, //out
     length_total: 0, //out, real length
     xcd: 0, //out, x of center on dropout
     ycd: 0, //out, y of center on dropout
@@ -365,9 +399,15 @@ var cs = {
         this.zcb = this.bb_z_offset;
         this.angle = angle_from_line(this.xcb, this.ycb, this.xcd, this.ycd);
         this.length_xy = length_from_line(this.xcb, this.ycb, this.xcd, this.ycd);
+        this.length_xz = length_from_line(this.xcb, this.zcb, this.xcd, this.zcd);
         this.length_total = vector_length(this.xcd - this.xcb, this.ycd - this.ycb, this.zcd - this.zcb);
+        
         this.angle_to_bb = angle_from_vectors(0, 0, 1, // the bottom bracket axis is purely in z
             this.xcd - this.xcb, this.ycd - this.ycb, this.zcd - this.zcb) *180 / Math.PI;
+        
+        this.angle_xz = 90 - angle_from_vectors(0, 0, 1,
+            this.xcd - this.xcb, 0, this.zcd - this.zcb) *180/Math.PI;
+
         this.angle_to_dropout = 90 - this.angle_to_bb;
     },
 
@@ -384,6 +424,44 @@ var cs = {
 
     draw: function() {
         draw_pipe(this.xcb, this.ycb, this.length_xy, this.angle, this.diameter, this.color);
+    },
+
+    draw_cs_dwg: function(cs_dwg_offset) {
+
+        draw_pipe(bb.xc,
+            bb.yc - cs_dwg_offset + this.bb_z_offset,
+            this.length_xz,
+            this.angle_xz,
+            this.diameter,
+            this.color);
+
+        draw_pipe(bb.xc,
+            bb.yc - cs_dwg_offset - this.bb_z_offset,
+            this.length_xz,
+            - this.angle_xz,
+            this.diameter,
+            this.color);
+
+        // cs real length
+        draw_pipe(this.xcd,
+            dropout.yc - 2 * cs_dwg_offset + dropout.span/2 + dropout.thickness/2,
+            this.length_total,
+            180 + this.angle_to_dropout,
+            this.diameter,
+            this.color);
+
+        draw_pipe(this.xcd,
+            dropout.yc - 2 * cs_dwg_offset - dropout.span/2 - dropout.thickness/2,
+            this.length_total,
+            180 - this.angle_to_dropout,
+            this.diameter,
+            this.color);
+
+        draw_dimension_scaled(this.xcd,
+            dropout.yc - 2 * cs_dwg_offset + dropout.span/2 + dropout.thickness/2,
+            "cs real length / dł. rzeczywista d. widełek: " + this.length_total.toPrecision(4),
+            40,
+            this.color);
     }
 };
 
@@ -533,7 +611,17 @@ var cranks = {
     draw: function() {
         draw_line_scaled(this.xc, this.yc, this.xce, this.yce, this.color);
         draw_circle_scaled(this.xc, this.yc, this.radius, this.color);
+    },
+
+    draw_cs_dwg: function(cs_dwg_offset) {
+        //chainring
+        draw_line_scaled(this.xc - this.radius,
+            this.yc - cs_dwg_offset + this.chainline,
+            this.xc + this.radius,
+            this.yc - cs_dwg_offset + this.chainline,
+            this.color);
     }
+
 };
 
 /******************************************************************************/
@@ -583,6 +671,7 @@ var f_wheel = {
     tyre: 35, //in
     xc: 0, //out
     yc: 0, //out
+    kolor: "#6600ff",
 
     /*
      * dependencies: fork,
@@ -600,9 +689,9 @@ var f_wheel = {
     },
 
     draw: function() {
-        draw_circle_scaled(this.xc, this.yc, this.diameter/2, "#ff0000");
-        draw_circle_scaled(this.xc, this.yc, this.diameter/2 + this.tyre, "#ff0000");
-        draw_circle_scaled(this.xc, this.yc, 5, "#000000");
+        draw_circle_scaled(this.xc, this.yc, this.diameter/2, this.kolor);
+        draw_circle_scaled(this.xc, this.yc, this.diameter/2 + this.tyre, this.kolor);
+        draw_circle_scaled(this.xc, this.yc, 5, this.kolor);
     }
 };
 
@@ -614,6 +703,7 @@ var r_wheel = {
     tyre: 35, //in
     xc: 0, //out
     yc: 0, //out
+    kolor: "#ff0066",
 
     /*
      * dependencies: dropout,
@@ -631,7 +721,22 @@ var r_wheel = {
     },
     
     /* copy from the front */
-    draw: f_wheel.draw
+    draw: f_wheel.draw,
+
+    draw_cs_dwg: function(cs_dwg_offset) {
+        //r_wheel axel
+        draw_line_scaled(this.xc,
+            bb.yc - cs_dwg_offset + dropout.span/2,
+            this.xc,
+            bb.yc - cs_dwg_offset - dropout.span/2,
+            this.kolor);
+        
+        // tyre in the real-dimension drawing
+        draw_circle_scaled(this.xc - this.diameter/2 - this.tyre/2,
+            dropout.yc - 2 * cs_dwg_offset,
+            this.tyre/2,
+            this.kolor);
+    }
 };
 
 /******************************************************************************/
@@ -640,12 +745,36 @@ var r_wheel = {
 var cb_cs = {
     distance: 366, //in
     diameter: 18, //in
+    kolor: "#777700", //in
     
+    description: function() {
+        desc  = "chainstay cross-beam diameter, distance / średnica, odległość poprzeczki widełek dolnych: " +this.diameter + ", " +this.distance + "\n";
+        desc += "\n";
+        return desc;
+    },
+
+    draw_cs_dwg: function(cs_dwg_offset)
+    {
+        // cs cross-beam
+        draw_pipe(dropout.xc - this.distance,
+            dropout.yc - 2 * cs_dwg_offset - dropout.span/2 /*- dropout.thickness/2*/,
+            dropout.span, 90,
+            this.diameter,
+            this.kolor);
+    }
+
 };
+    
 
 var cb_ss = {
     distance: 366, //in
     diameter: 12, //in
+
+    description: function() {
+        desc  = "seatstay cross-beam diameter, distance / średnica, odległość poprzeczki widełek górnych: " +this.diameter + ", " +this.distance + "\n";
+        desc += "\n";
+        return desc;
+    }
 };
 
 
@@ -695,6 +824,7 @@ var wheelbase = {
     xr: 0, //out
     yr: 0, //out
     wb: 0, //out
+    color: "#ff00ff",
     
     /*
      * dependencies: f_wheel, r_wheel
@@ -714,7 +844,13 @@ var wheelbase = {
     },
 
     draw: function() {
-        draw_line_scaled(this.xf, this.yf, this.xr, this.yr, "#999999");
+        draw_line_scaled(this.xf, this.yf, this.xr, this.yr, this.color);
+    },
+
+    draw_cs_dwg: function(cs_dwg_offset)
+    {
+        /* center line / oś wzdłużna ramy */
+        draw_line_scaled(f_wheel.xc, bb.yc - cs_dwg_offset, r_wheel.xc, bb.yc - cs_dwg_offset, this.color);
     }
 };
 
@@ -728,6 +864,7 @@ var standover = {
     yb: 0, //out
     standover_height: 0, //out
     top_tube_top_at_bb:0, //out
+    bb_bottom_to_ground: 0, //out
 
     /*
      * dependencies: f_wheel, tt, 
@@ -737,6 +874,7 @@ var standover = {
         this.top_tube_top_at_bb = (Math.tan(-tt.angle*Math.PI/180) * (tt.xcs - bb.xc)) + tt.ycs + (tt.diameter/2);
         this.ground_level = f_wheel.yc - (f_wheel.diameter/2) - f_wheel.tyre;
         this.standover_height = this.top_tube_top_at_bb - this.ground_level;
+        this.bb_bottom_to_ground = bb.yc - bb.diameter/2 - this.ground_level;
 
         this.xt = bb.xc;
         this.yt = this.top_tube_top_at_bb;
@@ -745,7 +883,8 @@ var standover = {
     },
 
     description: function() {
-        desc  = "standover height at bb / wysokość przekroku ramy na wysokości suportu: " + this.standover_height.toPrecision(4) + " mm\n"; 
+        desc  = "standover height at bb / wysokość przekroku ramy na wysokości suportu: " + this.standover_height.toPrecision(4) + " mm\n";
+        desc += "bottom bracket bottom to ground / wysokość dołu suportu do ziemii: " + this.bb_bottom_to_ground.toPrecision(4) + " mm\n"; 
         desc += "\n"; 
         return desc;
     },
@@ -1040,17 +1179,15 @@ function calculate()
     ht_tt_angle.calculate(); summary += ht_tt_angle.description();
     ht_dt_angle.calculate(); summary += ht_dt_angle.description();
     st_dt_angle.calculate(); summary += st_dt_angle.description();
-    
- 
-    
-    summary += "chainstay cross-beam diameter, distance / średnica, odległość poprzeczki widełek dolnych: " + cb_cs.diameter + ", " + cb_cs.distance + "\n";
-    summary += "seatstay cross-beam diameter, distance / średnica, odległość poprzeczki widełek górnych: " + cb_ss.diameter + ", " + cb_ss.distance + "\n";
+    /* cb_cs.calculate(); */ summary += cb_cs.description();
+    /* cb_ss.calculate(); */ summary += cb_ss.description();
 
     document.getElementById("summary").innerHTML = summary;
 }
 
 function rysuj()
 {
+    wheelbase.draw();
     bb.draw();    
     cranks.draw();
     pedals.draw();
@@ -1066,75 +1203,24 @@ function rysuj()
     r_wheel.draw();
     dropout.draw();
     tyre_pedal_dist.draw();
-    wheelbase.draw();
     standover.draw();
     ht_tt_angle.draw();
     ht_dt_angle.draw();
     st_dt_angle.draw();
 
-    //--------------------------------------------------------------------------
-    // chainstay drawing
+    /*************************************************************************/
+    /* chainstay drawing */
+    /*************************************************************************/
 
-    let cs_dwg_offset = 400;
-    
-    draw_line_scaled(f_wheel.xc, bb.yc - cs_dwg_offset, r_wheel.xc, bb.yc - cs_dwg_offset);
+    let CS_DWG_OFFSET = 400;
 
-    //bb
-    draw_line_scaled(bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset + bb.width/2, bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset + bb.width/2);
-    draw_line_scaled(bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset + bb.width/2, bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset - bb.width/2);
-    draw_line_scaled(bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset - bb.width/2, bb.xc + bb.diameter/2, bb.yc - cs_dwg_offset - bb.width/2);
-    draw_line_scaled(bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset + bb.width/2, bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset - bb.width/2);
-
-    //r_wheel axel
-    draw_line_scaled(r_wheel.xc, bb.yc - cs_dwg_offset + dropout.span/2, r_wheel.xc, bb.yc - cs_dwg_offset - dropout.span/2);
-
-    //dropout
-    draw_line_scaled(dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2,
-        dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness, "#000000");
-    draw_line_scaled(dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness,
-        dropout.xc + dropout.length, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness, "#000000");
-    draw_line_scaled(dropout.xc + dropout.length, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness,
-        dropout.xc + dropout.length, bb.yc - cs_dwg_offset + dropout.span/2, "#000000");
-    draw_line_scaled(dropout.xc + dropout.length, bb.yc - cs_dwg_offset + dropout.span/2,
-        dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2, "#000000");
-
-    draw_line_scaled(dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset - dropout.span/2,
-        dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset -dropout.span/2 - dropout.thickness, "#000000");
-    draw_line_scaled(dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset - dropout.span/2 - dropout.thickness,
-        dropout.xc + dropout.length, bb.yc - cs_dwg_offset - dropout.span/2 - dropout.thickness, "#000000");
-    draw_line_scaled(dropout.xc + dropout.length, bb.yc - cs_dwg_offset - dropout.span/2 - dropout.thickness,
-        dropout.xc + dropout.length, bb.yc - cs_dwg_offset - dropout.span/2, "#000000");
-    draw_line_scaled(dropout.xc + dropout.length, bb.yc - cs_dwg_offset - dropout.span/2,
-        dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset - dropout.span/2, "#000000");
-    
-    //chainring
-    draw_line_scaled(bb.xc - cranks.radius, bb.yc - cs_dwg_offset + cranks.chainline, bb.xc + cranks.radius, bb.yc - cs_dwg_offset + cranks.chainline);
-
-    // tyre
-    //draw_circle_scaled(r_wheel.xc - r_wheel.diameter/2 - r_wheel.tyre/2, bb.yc - cs_dwg_offset, r_wheel.tyre/2, "#FF0000");
-
-    //cs
-    let cs_angle = angle_from_line(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness/2);
-    let cs_length = length_from_line(bb.xc /*  bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, dropout.xc - dropout.cs_offset_x, bb.yc - cs_dwg_offset + dropout.span/2 + dropout.thickness/2);
-    draw_pipe(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset + cs.bb_z_offset, cs_length, cs_angle, cs.diameter, "#000000");
-    draw_pipe(bb.xc /* + bb.diameter/2 */, bb.yc - cs_dwg_offset - cs.bb_z_offset, cs_length, -cs_angle, cs.diameter, "#000000");
-
-    draw_line_scaled(bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset + bb.width/2, bb.xc - bb.diameter/2, bb.yc - cs_dwg_offset - bb.width/2, "#000000");
-    
-    // cs real length
-    draw_pipe(cs.xcd, dropout.yc - 2 * cs_dwg_offset + dropout.span/2 + dropout.thickness/2, cs.length_total, 180 + cs.angle_to_dropout, cs.diameter, "#000000");
-    draw_pipe(cs.xcd, dropout.yc - 2 * cs_dwg_offset - dropout.span/2 - dropout.thickness/2, cs.length_total, 180 - cs.angle_to_dropout, cs.diameter, "#000000");
-
-    // cs cross-beam
-    draw_pipe(dropout.xc - cb_cs.distance,
-        dropout.yc - 2 * cs_dwg_offset - dropout.span/2 /*- dropout.thickness/2*/,
-        dropout.span, 90,
-        cb_cs.diameter,
-        "#777700");
-
-
-     // tyre
-    draw_circle_scaled(r_wheel.xc - r_wheel.diameter/2 - r_wheel.tyre/2, dropout.yc - 2 * cs_dwg_offset, r_wheel.tyre/2, "#FF0000");
+    bb.draw_cs_dwg(CS_DWG_OFFSET);
+    dropout.draw_cs_dwg(CS_DWG_OFFSET);
+    wheelbase.draw_cs_dwg(CS_DWG_OFFSET);
+    r_wheel.draw_cs_dwg(CS_DWG_OFFSET);
+    cranks.draw_cs_dwg(CS_DWG_OFFSET);
+    cs.draw_cs_dwg(CS_DWG_OFFSET);
+    cb_cs.draw_cs_dwg(CS_DWG_OFFSET);
     
     //--------------------------------------------------------------------------
     //seatstay drawing 
@@ -1162,7 +1248,6 @@ function rysuj()
         
     draw_circle_scaled(ss_dwg_offset + dropout.xc, dropout.yc + r_wheel.diameter/2 + r_wheel.tyre/2, r_wheel.tyre/2, "#FF0000");
 
-    
     //--------------------------------------------------------------------------
     //resizing canvas
     if((xmax - xmin) >= canvas.width)
@@ -1171,7 +1256,6 @@ function rysuj()
         if(xmin < 0) x0 -= xmin -1;
     }
 
-        
     if((ymax - ymin) >= canvas.height)
     {
         canvas.height = ymax - ymin + 3;
@@ -1195,7 +1279,6 @@ function rysuj_opis()
     wiersze = summary.split("\n");
     y = ODL_Y;
 
-    //for each (var wiersz in wiersze)
     for (var i = 0; i < wiersze.length; i++)
     {
         ctx.fillText(wiersze[i], ODL_X, y);
