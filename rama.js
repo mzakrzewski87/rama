@@ -294,6 +294,7 @@ var dt = {
         desc += "down tube angle with ground / kąt rury dolnej względem podłoża: " + this.angle.toPrecision(4) + " deg\n";
         desc += "down tube diameter / średnica rury dolnej: " + this.diameter.toPrecision(4) + " mm\n";
         desc += "\n";
+        return desc;
     },
 
     draw: function() {
